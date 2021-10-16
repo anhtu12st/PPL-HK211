@@ -1,0 +1,16 @@
+
+class Grade {
+        string nameOfCourse;
+        int mark;
+        Grade() {
+            nameOfCourse := "";
+            mark := 0;
+        }
+        Grade(string nameOfCourse; int mark) {
+            this.nameOfCourse := nameOfCourse;
+            this.mark := mark;
+        }
+        void setName(string name) { this.nameOfCourse := name; }
+        void setMark(int mark)  { this.mark := mark;}
+        int getMark()      { return mark; }
+}

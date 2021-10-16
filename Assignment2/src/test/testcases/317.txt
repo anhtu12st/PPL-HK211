@@ -1,0 +1,39 @@
+class Person {
+            int age;
+            float height;
+            string name;
+            string id;
+            Person(int age; float height; string name,id){
+                this.age := age;
+                this.height := height;
+                this.name := name;
+                this.id := id;
+            }
+            void setName(string name) {
+                this.name := name;
+            }
+            string getName(){
+                return this.name + "LTT is the best";
+            }
+        }
+        class Student extends Person{
+            float mark = 10.0e+1;
+            string conduct = "Good";
+            float getMark() {
+                return this.mark + 1.0;
+            }
+            void setConduct(string conduct){
+                this.conduct := conduct;
+            }
+        }
+        class Main {
+            static int countST = 0;                               
+            void main() {
+                Student stu1;
+                io.print(stu1.getMark());
+                for i := 1 to 10 do {
+                    stu1 := stu1 * 2;
+                    if stu1 == 10 then break; else continue;
+                }
+            }
+        }

@@ -1,0 +1,21 @@
+
+class node {
+    int data;
+    node next;
+    node(int data; node next) {
+        this.data := data;
+        this.next := next;
+    }
+    int getData() {
+        return data;
+    }
+    node getNext() {
+        return next;
+    }
+    void setData(int data) {
+        this.data := data;
+    }
+    void setNext(node next) {
+        this.next := next;
+    }
+}

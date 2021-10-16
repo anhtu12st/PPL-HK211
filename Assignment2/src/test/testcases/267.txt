@@ -1,0 +1,22 @@
+
+# LECTURER
+
+class Lecturer {
+        string name;
+        Faculty lecFaculty;
+        Lecturer(string n)  { name:=n; }
+        Lecturer(string n; Faculty f) { name := n; lecFaculty := f; }
+        string getNameLecturer() { return name; }
+        void setNameLecturer(string n) { name := n; }
+        string getNameFacultyOfLecturer() { return lecFaculty.getNameFaculty(); }
+        void setNameFacultyOfLecturer(string n) { lecFaculty.setNameFaculty(n); }
+};
+
+# CLASSROOM
+
+class Classroom {
+        string nameRoom;
+        Classroom(string n) { nameRoom:=n;}
+        string getNameClassroom() { return nameRoom; }
+        void setNameClassroom(string n) { nameRoom := n; }
+}

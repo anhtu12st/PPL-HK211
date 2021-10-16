@@ -1,0 +1,18 @@
+class Integer {
+            static final float count;
+            string str_name = "Lam Thien Toan\n";
+            Integer(float count; string str){
+                this.count := count;
+                this.str_name := str;
+            }
+            void increment() {
+                this.count := this.count + 1;
+            }
+        }
+        class Example {
+            void main() {
+                bool x = true;
+                int t = 0;
+                if t == 0 then x := false; else t := t + 1;
+            }
+        }

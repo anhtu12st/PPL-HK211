@@ -1,0 +1,11 @@
+
+        class Buildng {
+            float height,weight;
+            int getType() {}
+            Buildng(float height,weight){
+                this.height := "height";
+                this.weight := weight;
+            }
+            static int num =0;
+        }
+        

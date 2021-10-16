@@ -1,0 +1,1 @@
+void,GameOver,(,),{,SceneManager,.,LoadScene,(,SceneManager,.,GetActiveScene,(,),.,buildIndex,-,1,),;,},<EOF>

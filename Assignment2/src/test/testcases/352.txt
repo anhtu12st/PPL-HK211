@@ -1,0 +1,8 @@
+
+        class Maim /* extends */ {
+            void main(){
+            string[100] a; 
+            a := "Hello world";
+            } 
+        }
+        

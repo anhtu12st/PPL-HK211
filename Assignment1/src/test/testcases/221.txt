@@ -1,0 +1,7 @@
+
+        class testData {
+            testData(int a,b; float b) {
+                if (a == b) then a := 1;
+                if a > b then a : = 2; else a := 2;
+            }
+        }

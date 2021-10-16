@@ -1,0 +1,9 @@
+
+        class school {
+            final int a;
+            static void checker(int a, b; float c) {
+            }
+            static a = 2, b = 6;
+            school(int[5] arr) {
+            }
+        }

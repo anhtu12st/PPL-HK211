@@ -1,0 +1,12 @@
+
+class tesster {
+    int[5] getCaculatorInt(int a,b) {
+        int[5] arr;
+        int a1 = a + b;
+        int a2 = a- b;
+        int a3 = a*b;
+        int a4 = a%b;
+        int a5 = a\b;
+        arr := {a1,a2,a3,a4,a5};
+    }
+}

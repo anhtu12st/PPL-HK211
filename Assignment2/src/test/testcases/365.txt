@@ -1,0 +1,16 @@
+
+        class Room {
+            string name;
+            Room(){
+                this.name:=nil;
+            }
+            Room(string name){
+                this.name:=name;
+            }
+        }
+        class Maim{
+            void main(){
+                s:= new Room();
+            }
+        }
+        

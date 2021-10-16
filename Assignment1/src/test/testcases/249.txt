@@ -1,0 +1,7 @@
+
+        class checkExp {
+            void check1(boolean a,b,c) {
+                a1:= a > (b > c);
+                a2:= ((a==b)!=c)==123;
+            }
+        }

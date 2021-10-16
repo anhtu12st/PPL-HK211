@@ -1,0 +1,28 @@
+
+class io {
+    static void getInt(int a) {
+        int data = (system.checkIntLitForm(system.getIO())).toInt();
+        a := data;
+    }
+    static void getFloat(float a) {
+        float data = (system.checkFloatLitForm(system.getIO())).toFloat();
+        a := data;
+    }
+    static void getBoolean(boolean a) {
+        boolean data = (system.checkBooleanLitForm(system.getIO())).toBoolean();
+        a := data;
+    }
+    static void getline(string a) {
+        string test = system.getIO();
+        a := "";
+        for i:=(true && false==true) downto 1. + 2e-123 do{
+            a := a^test;
+            test := system.getIO();
+            if test == "\n" then break;
+            else continue;
+        }
+    }
+    static void fflush(typeIO s) {
+        if s == stdin then system.clear_console();
+    }
+}

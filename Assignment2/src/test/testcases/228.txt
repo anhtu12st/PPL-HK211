@@ -1,0 +1,30 @@
+
+        class testFor {
+            testFor() {
+                for i:=1 to 10 do a:=a+1;
+            }
+            testClass callFor() {
+                for a:=5 downto 25 do {
+                    a := a + 1;
+                    for a:= 245 to 21 do {
+                        a.Pi[5] := 1 + 2;
+                        if a.v < z[2] then {
+                            if (a == 1) then {
+                                if (a == 1) then {
+                                    if (a > 1) then {
+                                        a := 5;
+                                        b := 6;
+                                    }
+                                    else {
+                                        if a > b then a := 2; else a := 2;
+                                    }
+                                }
+                            }
+                            else {
+                                if a > b then a := 2; else a := 2;
+                            }
+                        }
+                    }
+                }
+            }
+        }

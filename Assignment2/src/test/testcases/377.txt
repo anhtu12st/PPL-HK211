@@ -1,0 +1,8 @@
+
+        class Maim {
+            void main(){
+                string a;
+                a := nil;
+            } 
+        }
+        

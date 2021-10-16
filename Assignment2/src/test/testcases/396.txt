@@ -1,0 +1,7 @@
+class Example1 extends extends_ {
+            int[5] x;
+                Example1(Example1 Example1){
+                    Example1 Example1;
+                }
+            }
+            

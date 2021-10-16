@@ -1,0 +1,1 @@
+ class abc extends D (int a,b) {} 

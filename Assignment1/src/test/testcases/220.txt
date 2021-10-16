@@ -1,0 +1,11 @@
+
+        class testData {
+            testData(int a; float b) {
+                a.b := z + a;
+                a.a.b := z + b;
+                a.b[1] := 2 + 1 - 1.0023e-12;
+                arr := {1,2,3,4};
+                a := 1 + 2 - abc;
+                a := new Doctor(1,2,3,z,t);
+            }
+        }

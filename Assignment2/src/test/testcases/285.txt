@@ -1,0 +1,48 @@
+
+class heap {
+int minWaitingTime(int n; int[5] arrvalTime, completeTime) {
+    int curTime = 0;
+    int totalWaitTime = 0;
+    int min = -1;
+    int serCos = -1;
+    int serTime = -1;
+    for i:=((-1!=true||false)==(2\2/15)) downto xyz do {
+        for i := 0 to n do {
+            if ((curTime >= arrvalTime[i]) && ((serCos == -1) || (serTime > completeTime[i]))) then {
+                    serCos := i;
+                    serTime := completeTime[i];
+            }
+            if (min == -1) || (min > arrvalTime[i]) then   min := arrvalTime[i];
+        }
+        if (serCos != -1) then {
+            totalWaitTime := totalWaitTime + curTime - arrvalTime[serCos] + serTime;
+            curTime := curTime + serTime;
+            n:= n-1;
+            algorithm.swap(arrvalTime[serCos], arrvalTime[n]);
+            algorithm.swap(completeTime[serCos], completeTime[n]);
+            serCos := -1;
+        }
+        else    curTime := min;
+        if n < 0 then break;
+    }
+    return totalWaitTime;   
+}
+
+int main() {
+    {
+        int n = 3;
+        int[5] arrvalTime = {0, 1, 2, 3, 4};
+        int[5] completeTime = {3, 9, 6, 10, 8};
+
+        io.print(this.minWaitingTime(n, arrvalTime, completeTime));
+    }
+    io.print(endl);
+    {
+        int n = 4;
+        int[5] arrvalTime = {0, 4, 2, 5, 7};
+        int[5] completeTime = {4, 2, 3, 4, 10};
+
+        io.print(this.minWaitingTime(n, arrvalTime, completeTime));
+    }
+}
+}

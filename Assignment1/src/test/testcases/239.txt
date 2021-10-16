@@ -1,0 +1,9 @@
+
+        class School {
+            Student cloneStudent(Student stu){
+                Student clone = new Student();
+                if clone != nil then
+                return clone;
+                else return nil;
+            }
+        }

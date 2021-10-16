@@ -1,0 +1,9 @@
+
+        class testFor {
+            testFor() {
+                for i:=1 to 10 do a:=a+1;
+            }
+            testClass callFor() {
+                for a.b[2]:=5 downto 25 do a:=a+1;
+            }
+        }

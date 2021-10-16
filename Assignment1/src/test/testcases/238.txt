@@ -1,0 +1,21 @@
+
+        class testData extends PPL {
+            void loopTest(int a,v; float c,d; boolean a,s; string str1,str2; Room r1,r2) {
+                for i := (a + c -d == f) downto a+(a >=d)/32 do {
+                    if a > f-1 then break;
+                    for i := (a + c -d == f) downto a+(a >=d)/32 do {
+                        for i := (a + c -d == f) downto a+(a >=d)/32 do {
+                            for i := (a + c -d == f) downto a+(a >=d)/32 do {
+                                for i := (a + c -d == f) downto a+(a >=d)/32 do {
+                                    if a > f-1 then break;
+                                }
+                                if a > f-1 then break;
+                            }
+                            if a > f-1 then break;
+                        }
+                        if a > f-1 then break;
+                    }
+                    if a > f-1 then break;
+                }
+            }
+        }

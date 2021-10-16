@@ -1,0 +1,21 @@
+class Name{
+             string firstName, lastName, fullName;
+          static void  printName(int name, _final) {
+                final int count = 0;
+                this.firstName := name;
+                if flag then
+                    io.writeStrLn("Expression is true");
+                else
+                    io.writeStrLn ("Expression is false");
+                
+            }
+            void main(){
+                this.aPI := 3.14;
+                value := x.foo(5);
+                l[3] := value * 2;
+                if flag then
+                    io.writeStrLn("Expression is true");
+                else
+                    io.writeStrLn ("Expression is false");
+            }
+           }

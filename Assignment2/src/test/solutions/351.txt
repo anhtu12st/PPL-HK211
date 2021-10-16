@@ -1,0 +1,1 @@
+Program([ClassDecl(Id(Maim),[MethodDecl(Id(main),Instance,[],VoidType,Block([VarDecl(Id(a),FloatType)],[AssignStmt(Id(a),FloatLit(1.0)),Call(Id(io),Id(writeFloatLn),[Id(a)])]))])])

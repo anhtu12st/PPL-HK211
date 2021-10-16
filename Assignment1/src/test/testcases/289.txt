@@ -1,0 +1,16 @@
+
+class School {
+    static string[50] class_name;
+    static int num_class;
+    static int getNumClass() {
+        return num_class;
+    }
+    static string getNameClass(int i) {
+        if i < num_class then
+        return class_name[i];
+    }
+    static updateClass(string name) {
+        class_name[num_class] := name;
+        num_class := num_class + 1;
+    }
+}

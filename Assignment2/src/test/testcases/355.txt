@@ -1,0 +1,13 @@
+
+        class Room {
+            static int[4] total={0,0,0,0};
+            string name;
+            Room(){
+                this.name:=nil;
+            }
+            Room(string name){
+                this.name:=name;
+                ID.total[0] := ID.total[0] +1;
+            }
+        }
+        

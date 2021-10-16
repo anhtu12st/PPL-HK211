@@ -1,0 +1,17 @@
+
+        void add(int s, int t) {
+        Interval newBus;
+        newBus.start = s;
+        newBus.end = t;
+        if (max == 0) {
+            bus.push_back(newBus);
+            in.push_back(s);
+            out.push_back(t);
+            findMax();
+        }
+        else if (insertBus(newBus)) {
+            insertData(1, s);
+            insertData(0, t);
+            findMax();
+        }
+    }

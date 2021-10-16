@@ -1,0 +1,10 @@
+
+class mainFuncion {
+    void insert (int index; node root, n) {
+        if index == 0 then
+            n.setNext(root.getNext());
+            root.setNext(n);
+        else
+            insert(index - 1, root.getNext(), n);
+    }
+}

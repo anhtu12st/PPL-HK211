@@ -1,0 +1,1 @@
+Program([ClassDecl(Id(Maim),[MethodDecl(Id(main),Instance,[],VoidType,Block([VarDecl(Id(a),StringType)],[AssignStmt(Id(a),NullLiteral())]))])])

@@ -1,0 +1,1 @@
+for;14,(;43,long;59,long;59,i;59,=;42,0;54,;;49,i;59,<=;35,num_of_thread;59,;;49,i;59,+;25,+;25,);44,{;47,if;9,(;43,i;59,!=;31,num_of_thread;59,);44,pthread_create;59,(;43,Error Token &

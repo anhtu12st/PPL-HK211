@@ -1,0 +1,8 @@
+
+        class Maim {
+            void main(){
+                float[4] a;
+                this.print(a); 
+            }
+        }
+        

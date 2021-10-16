@@ -1,0 +1,1 @@
+Program([ClassDecl(Id(Name),[AttributeDecl(Instance,VarDecl(Id(firstName),StringType)),AttributeDecl(Instance,VarDecl(Id(lastName),StringType)),AttributeDecl(Instance,VarDecl(Id(fullName),StringType)),MethodDecl(Id(printName),Static,[param(Id(name),IntType),param(Id(_final),IntType)],VoidType,Block([],[AssignStmt(FieldAccess(Self(),Id(firstName)),Id(name))]))])])

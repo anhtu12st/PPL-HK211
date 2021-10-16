@@ -1,0 +1,26 @@
+
+        class C1 {
+            static int a;
+            C1(int a) {
+                this.a := a;
+                if this.CheckA() == true then this.PrintA();
+                else this.getA();
+            }
+            boolean CheckA() {
+                if this.a <= 0 then return false;
+                else return true;
+            }
+            void PrintA() {
+                io.print("Data of list" ^ str.makeStr(a));
+            }
+            void getA() {
+                for i:=0 to -1 do {
+                    int a = io.getInt();
+                    if (a > 0) then {
+                        this.a = a;
+                        break;
+                    }
+                }
+                this.PrintA();
+            }
+        }

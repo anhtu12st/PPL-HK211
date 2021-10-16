@@ -1,0 +1,14 @@
+
+        class testFor {
+            testFor() {
+                for i:=1 to 10 do a:=a+1;
+            }
+            testClass callFor() {
+                for a:=5 downto 25 do {
+                    a := a + 1;
+                    for a:= 245 to 21 do {
+                        a.Pi[5] := 1 + 2;
+                    }
+                }
+            }
+        }

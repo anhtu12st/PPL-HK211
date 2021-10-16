@@ -1,0 +1,4 @@
+
+        class teacher extends student {
+            string[3] getData(boolean a; school D) {}
+        }

@@ -1,0 +1,13 @@
+
+class makeSchool {
+    void main() {
+        for i:=true downto z-1 do {
+            string class;
+            io.fflush(stdin);
+            io.getline(class);
+            if class != "-1" then
+                School.updateClass(class);
+            else break;
+        }
+    }
+}

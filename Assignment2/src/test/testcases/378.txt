@@ -1,0 +1,11 @@
+
+        class Room {
+            string name;
+            Room(){
+                this.name:=nil;
+            }
+            void not(){
+               return this.name^this.name; 
+            }
+        }
+        

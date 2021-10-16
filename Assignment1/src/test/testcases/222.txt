@@ -1,0 +1,13 @@
+
+        class testData {
+            testData(int a,b; float b) {
+                if a.v < z[2] then {
+                    a := new Block(a.z, b+d);
+                    a := a.v.x.a[1];
+                }
+                else {
+                    this.A := this.function();
+                    this.B := Data.block.function(f, "abc");
+                }
+            }
+        }

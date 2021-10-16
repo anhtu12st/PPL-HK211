@@ -1,0 +1,15 @@
+
+        class Buildng {
+            float height,weight;
+            int getType() {}
+            # Buildng(float height,weight){
+            #    this.height := "height";
+            #    this.weight := weight;
+            # }
+        }
+        class School extends Buildng {
+            int getType(){
+            if(this.height>300) then return this.weight/1000; else return 0;
+            }
+        }
+        

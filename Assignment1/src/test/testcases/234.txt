@@ -1,0 +1,19 @@
+
+        class testData extends PPL {
+            void loopTest(int a,v; float c,d; boolean a,s; string str1,str2; Room r1,r2) {
+                for i := (a + c -d == f) downto a+(a >=d)/32 do {
+                    for _PPP:= in[1]+123-1.002e+1 to (1+boo[22])._zzt("abc",1,ea01)%12\22 do {
+                        if a == 2 then {
+                            a := 1 == 2;
+                            continue;
+                        }
+                        else {
+                            if a<= 1+in[2].block then break;
+                            else {
+                                a := a - 2\2;
+                            }
+                        }
+                    }
+                }
+            }
+        }

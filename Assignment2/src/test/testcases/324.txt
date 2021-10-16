@@ -1,0 +1,10 @@
+class Example1 {
+            int[5] x;
+            }
+            class Example2 extends Example1 {
+                Example1[5] x; # array 
+
+                }
+            class Example3 extends Example2 {
+                Examples2[5] x; 
+                }

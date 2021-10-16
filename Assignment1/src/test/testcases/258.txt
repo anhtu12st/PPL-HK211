@@ -1,0 +1,21 @@
+
+class smoke_run extends MonoBehaviour{
+    float speed = 5f;
+    Rigidbody2D rb;
+    float counter = 0;
+    Vector3 scaleChange;
+
+    void Start()
+    {
+        rb.velocity := transform.right * speed;
+        scaleChange := new Vector3(0.01, 0.01, 0.01);
+    }
+
+    void FixedUpdate()
+    {
+        transform.localScale := transform.localScale + scaleChange;
+        if (counter == 100) then {
+            system.Destroy(this);
+        }
+    }
+}

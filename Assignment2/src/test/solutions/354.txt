@@ -1,0 +1,1 @@
+Program([ClassDecl(Id(Room),[AttributeDecl(Instance,VarDecl(Id(name),StringType)),MethodDecl(Id(<init>),Instance,[],Block([],[AssignStmt(FieldAccess(Self(),Id(name)),NullLiteral())])),MethodDecl(Id(not),Instance,[],VoidType,Block([VarDecl(Id(b),StringType)],[AssignStmt(Id(b),StringLit("I dont know")),Return(BinaryOp(^,FieldAccess(Self(),Id(name)),Id(b)))]))])])

@@ -1,0 +1,1 @@
+Program([ClassDecl(Id(main),[AttributeDecl(Instance,VarDecl(Id(a),IntType)),AttributeDecl(Static,ConstDecl(Id(m),IntType,IntLit(5))),AttributeDecl(Static,ConstDecl(Id(c),IntType,IntLit(7))),AttributeDecl(Static,ConstDecl(Id(d),IntType,IntLit(9))),AttributeDecl(Static,ConstDecl(Id(a),IntType,IntLit(8))),AttributeDecl(Instance,ConstDecl(Id(x),IntType,IntLit(7)))])])

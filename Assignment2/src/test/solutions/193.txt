@@ -1,0 +1,1 @@
+Interval;59,(;43,int;10,start;59,=;42,0;54,,;52,int;10,end;59,=;42,0;54,);44,{;47,this;20,-;26,>;34,start;59,=;42,start;59,;;49,this;20,-;26,>;34,end;59,=;42,end;59,;;49,};48,bool;59,operator;59,<;33,(;43,Interval;59,Error Token &

@@ -1,0 +1,57 @@
+
+class Subject {
+        string name;
+        Lecturer subLecturer;
+        int sLec;
+        Classroom subRoom;
+        Subject(string n) { name:=n; sLec:=0;}
+        string getNameSubject() { return name; }
+        void setNameSubject(string n) { name := n; }
+        void inputData() {
+            string n;
+            int num;
+            io.print("---------------\n");
+            io.print("Input name of Subject: ");
+            io.fflush(stdin);
+            io.getline(n);
+            name := n;
+
+            io.Print("How many Lecturer? ");
+            io.getInt(num);
+            sLec := num;
+
+            for i:= 0 to -1 do {
+                io.print("The number must less than or equal 5!\n");
+                io.print("How many Lecturer? ");
+                io.getInt(num);
+                if (num > 0) then i := -2;
+            }
+
+            io.print("---------------\n");
+            for j := 0 to num do {
+                io.print("Input name of Lecturer " ^ str.toString(j + 1) ^ ":\n");
+                io.fflush(stdin);
+                io.getline(n);
+                subLecturer.setNameLecturer(n);
+                io.print("Input Lecturer's Faculty " ^ str.toString(j + 1) ^ ":\n");
+                io.fflush(stdin);
+                io.getline(n);
+                subLecturer.setNameFacultyOfLecturer(n);
+            }
+            io.print("----------\n");
+            io.print("Input name of Room: ");
+            io.fflush(stdin);
+            io.getline(n);
+            subRoom.setNameClassroom(n);
+        }
+        bool checkRoom(string name) {
+            string className = subRoom.getNameClassroom();
+            if (className == name) then    return 1;
+            return false;
+        }
+        void checkLect() {
+            io.print("List Lecturers of " ^ name ^ ":\n");
+            for i := 0 to sLec do
+                io.print(subLecturer.getNameLecturer() ^ endl);
+        }
+}

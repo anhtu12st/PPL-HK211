@@ -1,0 +1,20 @@
+
+        class C2 {
+            static C1 c;
+            final static int[5] arr;
+            C2(C1 c) {
+                this.c := c;
+                C1.PrintA();
+            }
+            void getArray() {
+                for i:=4 downto 0 do {
+                    int val = io.getInt();
+                    arr[i] := val;
+                }
+            }
+            int[5] getArr() {
+                return arr;
+                { }
+                { { } }
+            }
+        }

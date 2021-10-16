@@ -1,0 +1,97 @@
+
+class move {
+    Transform smoke_point;
+    GameObject smoke_pre;
+    float falling = -0.04;
+    float jumping = 0.8;
+    AudioSource jumpAudio;
+    float myHP = 10;
+    bool isJump = false;
+    float counting = 0;
+    float countJump = 0;
+    bool checkRun = false;
+    Text txt;
+
+    # FIRE
+    Transform fire_point;
+    GameObject bullet_water;
+    GameObject bullet_mask;
+    AudioSource shoot_Audio;
+    float num_bullet = 1.;
+    float count_trigger = 0;
+    # special skill
+    float count_skill = 100.e-123;
+    bool can_skill = false;
+    bool have_button = false;
+    GameObject water_skill;
+    GameObject button_skill;
+    AudioSource skill_Audio;
+
+    GameObject Heart;
+    float count_kira = -1.0e12;
+    void Update() {
+        if (Input.GetKeyDown("f")) then {
+            this.changeState();
+        }
+        if (!checkRun) then {
+            # UPDATE PLAYER'S HP
+            txt.text := myHP.ToString();
+            if (transform.position.y > 6) || (transform.position.y < -6) then this.GameOver();
+            # CONTROLL JUMP AND DROP OF PLAYER
+            if Input.GetButtonDown("Jump") && !isJump then {
+                jumpAudio.Play(0);
+                countJump := 4;
+                isJump := true;
+                counting := 3;
+                this.outSmoke();
+                this.jumpUp(jumping / 2);
+            }
+            else if countJump != 0 then {
+                if countJump > 3 then    this.jumpUp(jumping);
+                else                 this.jumpUp(jumping / 3);
+            }
+            else {
+                this.dropDown();
+                if counting == 0 then isJump := false;
+            }
+        }
+    }
+    void changeState() {
+        checkRun := !checkRun;
+    }
+    # FUNCTION FOR SKILL AND FIRE BULLET
+    void create_button_skill() {
+        system.Instantiate(button_skill, new Vector3(-6.5,-4,0), transform.rotation);
+    }
+    void create_skill() {
+        can_skill := false;
+        have_button := false;
+        system.Instantiate(water_skill, new Vector3(-10,0,0), transform.rotation);  
+        skill_Audio.Play(0);   
+    }
+    void shootWater() {
+        for i := 0  to num_bullet do {
+            system.Instantiate(bullet_water, fire_point.position, fire_point.rotation);  
+            shoot_Audio.Play(0);       
+        }
+    }
+    void shootMask() {
+        for i := 0 to num_bullet do {
+            system.Instantiate(bullet_mask, fire_point.position, fire_point.rotation);  
+            shoot_Audio.Play(0);       
+        }
+    }
+    # FUNCTION CONTROLL UFO AND EFFECT WHEN JUMPING
+    void outSmoke() {
+        system.Instantiate(smoke_pre, smoke_point.position, smoke_point.rotation);
+    }
+    void jumpUp(float upSize) {
+        system.transform.position := transform.position + new Vector3(0, upSize, 0);
+    }
+    void dropDown() {
+        system.transform.position := transform.position + new Vector3(0, falling, 0);
+    }
+    void GameOver() {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
+    }
+}

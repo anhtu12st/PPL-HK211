@@ -1,0 +1,7 @@
+
+        class Maim {
+            void main(){
+            (b.c[2]).o();
+            }
+        }
+        

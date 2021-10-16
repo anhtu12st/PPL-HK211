@@ -1,0 +1,23 @@
+
+class Student {
+        int studentID;
+        string name;
+        Grade grades;
+        int numOfGrade;
+        int sumMark;
+        Student(int ID; string name) {
+            this.studentID := ID;
+            this.name := name;
+            numOfGrade := 0;
+            sumMark := 0;
+        }
+        void insertGrade(string nameOfCourse; int mark) {
+            grades.setName(nameOfCourse);
+            grades.setMark(mark);
+            numOfGrade := numOfGrade+1;
+            sumMark := sumMark+ mark;
+        }
+        float getAverage()  {
+            return (float)sumMark / numOfGrade;
+        }
+};

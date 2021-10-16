@@ -1,0 +1,18 @@
+class Name{
+              string firstName, lastName, fullName, _string;
+           static void  printName(int name, _final) {
+                 final int count = 0;
+                 string x ={"rue","flase","1","\b:\""};
+                 this.firstName := name;
+                {
+                      for _ := i to 50 do return _;}}
+             void main(){
+                 this.aPI := 3.14;
+                 value := x.foo(5);
+                 l[3] := value * 2[2];
+                 for i := +3 to -10 do return x;
+            }
+            void main() {
+                twice twice = 5;
+            }
+            }

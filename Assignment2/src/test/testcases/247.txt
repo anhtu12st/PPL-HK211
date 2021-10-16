@@ -1,0 +1,6 @@
+
+        class checkExp {
+            void check1(boolean a,b,c) {
+                a1:= a > b > c;
+            }
+        }

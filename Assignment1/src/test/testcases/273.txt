@@ -1,0 +1,188 @@
+
+class mainClass {
+int main() {
+    Faculty facul;
+    Lecturer lect;
+    Student stud;
+    Classroom classR;
+    Subject subj;
+    int sFacu, sLect, sStud, sRoom, sSubj;
+    int n;
+
+    #=========================FACULTY=========================//
+    io.print("=============================================================\n");
+    io.print("How many Faculties? ");
+    io.getInt(n);
+    sFacu := n;
+    for i := 0 to n do {
+        string name;
+        io.print("-----------------------------\nInput details for Faculty " ^ str.toString(i + 1) ^ ":\n");
+        io.print("Input name of Faculty: ");
+        io.fflush(stdin);
+        io.getline(name);
+        facul.setNameFaculty(name);
+    }
+    #=======================LECTURER=======================//
+    io.print("=============================================================\n");
+    io.print("How many Lecturer? ");
+    io.getInt(n);
+    sLect := n;
+    for i := 0 to i<n do {
+        string name;
+        io.print("------------------------------\n");
+        io.print("Input details for Lecturer " ^ str.toString(i + 1) ^ ":\n");
+        io.print("Input name of Lecturer: ");
+        io.fflush(stdin);
+        io.getline(name);
+        this.lectsetNameLecturer(name);
+        io.print("Input Lecturer's Faculty: ");
+        io.fflush(stdin);
+        io.getline(name);
+        lect.setNameFacultyOfLecturer(name);
+    }
+    #=========================STUDENT=========================//
+    io.print("\n=============================================================\n");
+    io.print("How many Student? ");
+    io.getInt(n);
+    sStud := n;
+    for i := 0 to n do {
+        string name;
+        int id;
+        io.print("----------------------------------------\n");
+        io.print("Input details for Student " ^ str.toString(i + 1) ^ ":\n");
+        io.print("Input name of Student: ");
+        io.fflush(stdin);
+        io.getline(name);
+        stud.setNameStudent(name);
+        io.print("Input ID of Student: ");
+        io.getInt(id);
+        stud.setID(id);
+        io.print("Input Faculty of Student: ");
+        io.fflush(stdin);
+        io.getline(name);
+        stud.setNameFacultyStudent(name);
+        io.print("Input number of Subject: ");
+        io.getInt(id);
+        io.print("--------------------\n");
+        stud.inputSub(id);
+    }
+
+    #=========================CLASSROOM===========================//
+    io.print("\n=============================================================\n");
+    io.print("How many Classroom? ");
+    io.getInt(n);
+    sRoom := n;
+    for i:=0 to n do {
+        string name;
+        io.print("---------------------------------\n");
+        io.print("Input details for Classroom " ^ str.toString(i + 1) ^ ":\n");
+        io.print("Input name of Classroom: ");
+        io.fflush(stdin);
+        io.getline(name);
+        classR.setNameClassroom(name);
+    }
+
+    #=========================SUBJECT============================//
+    io.print("\n=============================================================\n");
+    io.print("How many Subject? ");
+    io.getInt(n);
+    sSubj := n;
+    subj.inputData();
+    io.print("\n=============================================================\n");
+    
+    #======================QUIZ 2====================//
+    n:=1;
+    if n!=0 then {
+        io.print("Please choose:");
+        io.getInt(n);
+        io.print("==========\n");
+        if n== 1 then {
+            string name;
+            bool hasKnown = 0;
+            io.print("Enter classroom name? ");
+            io.fflush(stdin);
+            io.getline(name);
+            for i := 0 to sSubj do {
+                if (subj.checkRoom(name)) then {
+                    if (hasKnown == 0) then {
+                        hasKnown := 1;
+                        io.print("----------\nList subjects hosted in this classroom:\n");
+                    }
+                    io.print(subj.getNameSubject() ^ endl);
+                }
+            }
+            if (hasKnown == 0) then
+                io.print("Don't have any subject hosted in this classroom!\n");
+            break;  
+        }
+
+        else if n== 2 then{
+            string name;
+            bool hasKnown = 0;
+            io.print("Enter subject name? ");
+            io.fflush(stdin);
+            io.getline(name);
+            for i := 0 to sSubj do {
+                if (stud.findSubject(name)) then{
+                    if (hasKnown == 0) then{
+                        hasKnown := 1;
+                        io.print("-----------\nList students studying this subject:\n");
+                    }
+                    io.print(stud.getNameStudent() ^ endl);
+                }
+            }
+            if (hasKnown == 0) then
+                io.print("Don't have any student studying this subject!\n");
+            break;
+        }
+
+        else if n== 3 then {
+            string name;
+            bool hasKnown = 0;
+            io.print("Enter student name? ");
+            io.fflush(stdin);
+            io.getline(name);
+            for i := 0 to sStud do
+                if (stud.getNameStudent() == name)then {
+                    hasKnown := 1;
+                    stud.checkLec();
+                }
+            if (hasKnown == 0)then
+                io.print("Don't have this student in database!\n");
+            break;
+        }
+
+        else if n== 4 then {
+            string facu, sub;
+            bool hasKnown = 0;
+            io.print("Enter faculty name? ");
+            io.fflush(stdin);
+            io.getline(facu);
+            io.print("Enter subject name? ");
+            io.fflush(stdin);
+            io.getline(sub);
+            for i := 0 to sStud do {
+                if (stud.checkFacuSub(facu, sub))then {
+                    if (hasKnown == 0)then {
+                        hasKnown := 1;
+                        io.print("----------\nList students belonging to this faculty and study this subject:\n");
+                    }
+                    io.print(   stud.getNameStudent() ^ endl);
+                }
+            }
+            if (hasKnown == 0)then
+                io.print("Don't have any student belonging to this faculty and study this subject!\n");
+            break;
+        }
+        else {
+            io.print("WRONG CODE NUMBER!");
+            break;
+        }
+        io.print("\n=========\nContinue ? Press 0 to EXIT or anykey to continue: ");
+        io.getInt(n);
+    }
+    return 0;
+
+}
+
+}

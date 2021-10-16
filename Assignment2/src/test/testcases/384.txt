@@ -1,0 +1,7 @@
+
+        class Maim {
+            void main(){
+                boolean [4]a="Helloworld"^a.boo[4];
+            }
+        }
+        

@@ -1,0 +1,9 @@
+
+        class school {
+            static boolean ID;
+            school(int a,b) {}
+            void makeSchool() {}
+        }
+        class University extends school {
+            University(a,b) {}
+        }

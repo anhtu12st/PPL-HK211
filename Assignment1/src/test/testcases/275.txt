@@ -1,0 +1,34 @@
+
+class skill{
+    string name = "";
+    skill(){
+        if (this.name == "") then
+            this.name := "Skill";
+    }
+    string getName() {
+        return this.name;
+    }
+    void displayData() {}
+}
+class FireBall extends skill{
+    FireBall(){
+        this.name := "FireBall";
+    }
+    void displayData() {
+        display.dis_instance.Display(this.name);
+    }
+}
+class RockShield extends skill{
+    RockShield(){
+        this.name := "RockShield";
+    }
+    void displayData() {
+        display.dis_instance.Display(this.name);
+    }
+}
+class WaterHealing extends skill{
+    WaterHealing(){ this.name := "WaterHealing";}
+    void displayData() {
+        display.dis_instance.Display(this.name);
+    }
+}

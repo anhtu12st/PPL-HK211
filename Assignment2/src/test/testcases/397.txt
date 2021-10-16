@@ -1,0 +1,7 @@
+class Example1 extends _extends {
+            #int[5] x;
+                Example1(Example1 Example1){
+                    Example1 Example1 = this.mnil;
+                }
+            }
+            

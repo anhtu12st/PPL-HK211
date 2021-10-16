@@ -1,0 +1,4 @@
+a[7+9]:=12;
+for i:=0-1 to 7+b do {
+a[i]:=a[i]+1;
+calFunction(i);}

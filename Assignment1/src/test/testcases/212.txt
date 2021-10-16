@@ -1,0 +1,4 @@
+
+        class school {
+            static checker(int a, b, float c) {}
+        }

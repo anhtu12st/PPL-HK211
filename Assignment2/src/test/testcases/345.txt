@@ -1,0 +1,26 @@
+class Name{
+           static void  printName(int name, _final) {
+                 final int count = 0;
+                 string x ={"rue","flase","1","\b:\""};
+                 this.firstName := name;
+                {
+                      for _ := i to 50 do return _;}}
+             void main(){
+                 this.aPI := 3.14;
+                 value := x.foo(5);
+                 l[3] := value * 2[2];
+                 for i := +3 to -10 do return x;
+                 {
+                     x := 5;
+                     {
+                         final string x ={"",""};
+                     }
+                 }
+            }
+            void main() {
+                twice twice = 5;
+                Name1 na_me = new Name();
+                if x != 4 then for x := 7 to --8 do return 1;
+                
+            }
+            }

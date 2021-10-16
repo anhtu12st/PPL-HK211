@@ -1,0 +1,7 @@
+
+        class printer {
+            static void print(int a,b; float b; int c){
+                io.print(a+b+c+b);
+            }
+        }
+        

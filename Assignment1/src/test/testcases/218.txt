@@ -1,0 +1,7 @@
+
+        class student {
+            final static school sch;
+            final static string ID;
+            student(school sch, string ID) {}
+            static void getData(string ID) {}
+        }

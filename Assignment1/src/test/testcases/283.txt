@@ -1,0 +1,12 @@
+
+class heap {
+int minWaitingTime(int n; int arrvalTime[]; int[5] completeTime) {
+    int curTime = 0;
+    int totalWaitTime = 0;
+    int min = -1;
+    int serCos = -1;
+    int serTime = -1;
+
+    return totalWaitTime;   
+}
+}

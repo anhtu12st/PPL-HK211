@@ -1,0 +1,8 @@
+
+        class Maim {
+            void main(){
+            int c;
+            c:=c.a(b.d);
+            }
+        }
+        

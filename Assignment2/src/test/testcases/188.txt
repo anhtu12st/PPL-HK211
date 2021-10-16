@@ -1,0 +1,6 @@
+printf("PI = %f
+", 4.0 * incircle / N);
+	printf("TIME = %d sec
+", (unsigned int)(time(NULL) - start));
+	pthread_mutex_destroy(&lock);
+	pthread_exit(NULL);

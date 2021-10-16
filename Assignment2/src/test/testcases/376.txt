@@ -1,0 +1,13 @@
+
+        class Room {
+            static final int total=0;
+            final static string name;
+            Room(){
+                this.name:=nil;
+            }
+            Room(string name){
+                this.name:=name;
+                ID.total := ID.total +1;
+            }
+        }
+        

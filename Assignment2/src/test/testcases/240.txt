@@ -1,0 +1,24 @@
+class Res {
+            int Add(int a, b) {
+                return a + b;
+            }
+            float Add(float a,b) {
+                return a + b \ c % 2 / 1 * a;
+            }
+            boolean Add(boolean a,b) {
+                return a || !b && !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!(c == f);
+            }
+            string Add (string a, "abcd") {
+                return a ^ b ^(c ^ d ^ ("abc" ^ fffffffffffffff));
+            }
+            doctor makeNew(int a; float b) {
+                if a== 0 then
+                return new doctor(a,b,c,d,1./2);
+                else {
+                    if a<1 then
+                        return this.doctor;
+                    else
+                        return nil;
+                }
+            }
+        }

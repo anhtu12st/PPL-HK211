@@ -1,0 +1,6 @@
+class Name {
+            static final int a;
+            static print a() {
+                
+            }
+            }

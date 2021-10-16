@@ -1,0 +1,9 @@
+class _ {
+                final float x;
+                void main(){
+                    _ _ ;
+                }
+                static string voi(_ __){
+                    __ := "__" + ___ ^ 23 --7;
+                }
+            }

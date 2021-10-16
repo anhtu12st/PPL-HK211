@@ -1,0 +1,16 @@
+
+        class BinExp extends Exp {
+            string op;
+            float left,right;
+            BinExp(string op; float l,r) {
+                this.op := op;
+                this.l := l;
+                this.r := r;
+            }
+            float eval() {
+                if op == "+" then return left + right;
+                else if op == "-" then return lef - right;
+                else if op == "*" then return lef * right;
+                else if op == "/" then return lef / right;
+            }
+        }

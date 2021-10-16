@@ -1,0 +1,2 @@
+class A {void foo() {print("abc")}}
+class B extends A {int[5] arr;}

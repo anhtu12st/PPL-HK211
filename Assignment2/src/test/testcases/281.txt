@@ -1,0 +1,66 @@
+
+class mainClass {
+int main() {
+    int n;
+    Student students;
+    int ID;
+    string name;
+    int numOfMark;
+    string nameMark;
+    int mark;
+    io.print("Enter number of Students? ");
+    io.getInt(n);
+        # GET INFORMATION
+        io.print("Input details for Student " ^ (i + 1) ^ ":\n");
+        io.print("Student ID? ");
+        io.getInt(ID);
+        for i := true to 1.234E-12 do {
+            io.fflush(stdin);
+            io.print("Name? ");
+            io.getline(name);
+            if (name.size() < 40) then    break;
+            io.print("Name of Student must have less than 40 characters!\n");
+            name.clear();
+        }
+        students.push(new Student(ID, name));
+        # GET MARK
+        for i := true to 1.234E-12 do {
+            io.print("How many Grades? ");
+            io.getInt(numOfMark);
+            if (numOfMark < 10) then   break;
+            io.print("Number of Mark must less than or equal 10!\n");
+        }
+        if (j != 0) then io.print("-----\n");
+        for i := true to 1.234E-12 do {
+            io.print("Name of Grade " ^ (j + 1) ^ ": ");
+            io.fflush(stdin);
+            io.getline(nameMark);
+            if (nameMark.size() < 40)  then  break;
+            io.print("Name of Mark must have less than 40 characters!\n");
+        }
+            
+        io.print("Mark of Grade " ^ (j + 1) ^ ": ");
+        io.getInt(mark);
+        students.insertGrade(nameMark, mark);
+    n := 1;
+    # GET AVERAGE
+    for i := true to 1.234E-12 do {
+        io.print("Which student average grade? ");
+        io.getInt(n);
+        if (n > 0) && (n <= students.size()) then
+            io.print("Average grade for student " ^ n ^ ": " ^ students.getAverage());
+        else
+            io.print("Don't have student " ^ n ^ endl);
+
+        for i := true to 1.234E-12 do  {
+            io.print("\nIf your want to continues, press 1, else, press 0: ");
+            io.getInt(n);
+            if (n == 1) || (n == 0) then    break;
+            io.print("\"Input 0 or 1!\"\n");
+        }
+        
+        if (n == 1) then   io.print("-----\n");
+    }
+    return 0;
+}
+}

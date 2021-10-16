@@ -1,0 +1,7 @@
+
+class tesster {
+    int[5] getCaculatorInt(int a,b) {
+        int[5] arr;
+        arr := {a + b, a - b, a * b, a % b, a \ b};
+    }
+}

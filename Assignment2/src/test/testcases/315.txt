@@ -1,0 +1,16 @@
+class Man {
+            int param, obj = 1;
+            static void printinfo() {
+                System.out.println("Day laf vi du");
+            }
+            void Alive() {
+                if this.obj + 1 * 2 then return "Tui" ^ "Con" ^ "Alive"; else for i := 0 to 10 do {
+                    this.obj := " [[]] ";
+                }
+            }
+            void main() {
+                Man obj = new Man();
+                obj.printinfo();
+                obj := obj + 1 - 12.e-13 > 50 ^ "String\n";
+            } 
+        }

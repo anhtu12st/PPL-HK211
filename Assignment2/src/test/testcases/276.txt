@@ -1,0 +1,30 @@
+
+class ButtonRun {
+    skill my_skill;
+    Text txt;
+    void InitButton(skill input_skill) {
+        this.my_skill := input_skill;
+        txt.text := my_skill.getName();
+    }
+    void clickButton() {
+        my_skill.displayData();
+    }
+}
+class factory_skil{
+    static skill get_skill(all_skill i) {
+        if i == all_skill.FireBall then
+                return new FireBall();
+        else if i == all_skill.WaterHealing then
+                return new WaterHealing();
+        else if i == all_skill.RockShield then
+                return new RockShield();
+        else
+                return new skill();
+    }
+}
+class manager_skill {
+    ButtonRun list_button;
+    manager_skill(all_skill i) {
+        list_button.InitButton(factory_skill.get_skill(i));
+    }
+}

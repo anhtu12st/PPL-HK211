@@ -1,0 +1,13 @@
+
+class  Class {
+    string name;
+    Class(string name) {
+        this.name := name;
+    }
+    student getStudent(string name, id; Class c; boolean option) {
+        if option == true then
+            return new special_student(name,id,c);
+        else
+            return new student(name,id,c);
+    }
+}

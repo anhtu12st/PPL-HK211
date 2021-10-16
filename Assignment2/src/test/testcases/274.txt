@@ -1,0 +1,14 @@
+
+class display {
+    static display dis_instance;
+    Text txt;
+    void Start()
+    {
+        if (dis_instance == null) then {
+            dis_instance := this;
+        }
+    }
+    static void Display(string str) {
+        txt.text := str;
+    }
+}

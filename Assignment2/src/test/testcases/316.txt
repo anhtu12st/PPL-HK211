@@ -1,0 +1,26 @@
+class Animal {
+            static final int legs = 4;           # normally has 4 legs 
+            string nose = "Nose\t";  
+            static void printN(){
+                system.out.println(this.nose);
+            }
+            }
+            class PigFish extends Animal {
+                static void swim() {
+                    io.swimsofar();
+                    io.breathalittle();
+                    io.keeponswim();
+                    io.reachgoal();
+                }
+                    }
+            class Test {
+                void main() {
+                    PigFish[3] pgf;
+                    string[3] noseColor = {  "red\b"   ,    "blue\f"   ,   "green\t"  };
+                    for i := 0 to 2 do 
+                        pgf[i] := noseColor[i];
+                    for j := 2 downto 0 do {
+                        pgf[j].printN();
+                    }
+                }
+                }

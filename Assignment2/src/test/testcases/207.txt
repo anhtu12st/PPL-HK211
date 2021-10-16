@@ -1,0 +1,5 @@
+
+        class school {
+            static int a = 1 + 2,b;
+            final float c;d = 1.0256;
+        }

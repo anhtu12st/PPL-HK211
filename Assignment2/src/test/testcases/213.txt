@@ -1,0 +1,5 @@
+
+        class school {
+            static void checker(int a, b, float c) {
+            }
+        }

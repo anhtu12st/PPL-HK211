@@ -1,0 +1,9 @@
+class Res {
+            int[6] add (int[3] a,b) {
+                int[6] res = copy.Array(a,b,res);
+                if res.size() != 0 then
+                    return res;
+                else
+                    return {0,0,0,0,0,0};
+            }
+        }

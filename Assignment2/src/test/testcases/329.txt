@@ -1,0 +1,5 @@
+class Exmap {
+                Example () {
+                    (a+b)[3] := 50;
+                }
+            }

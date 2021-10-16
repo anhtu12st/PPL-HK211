@@ -1,0 +1,19 @@
+
+class control_victim {
+    GameObject victim_die;
+    GameObject eff;
+    float speed_human = -0.15;
+
+    void FixedUpdate()
+    {
+        transform.position := transform.position + new Vector3(speed_human, 0, 0);
+    }
+    void OnTriggerEnter2D(Collider2D col) {  
+        if (col.gameObject.tag == "bullet_mask") || (col.gameObject.tag == "bullet_water_skill") then {
+            system.Destroy(this);
+            system.Instantiate(eff, transform.position, transform.rotation);
+            system.Instantiate(victim_die, transform.position, transform.rotation);
+        }
+        if (col.gameObject.tag == "bullet_water") || (col.gameObject.tag == "bullet_mask") then system.Destroy(col.gameObject);
+    }
+}

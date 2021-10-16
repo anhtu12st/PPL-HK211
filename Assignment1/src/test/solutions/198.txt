@@ -1,0 +1,1 @@
+num,=,float,(,input,(,"Moi ban nhap so :",),),fl,=,num,-,int,(,num,),fl,=,int,(,fl,*,4,),myroud,=,{,0,:,0,,,1,:,0.5,,,2,:,0.5,,,3,:,1,},print,(,"So lam tron :",,,float,(,int,(,num,),+,myroud,[,fl,],),),<EOF>

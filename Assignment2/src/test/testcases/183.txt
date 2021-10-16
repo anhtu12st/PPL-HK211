@@ -1,0 +1,7 @@
+# include <stdio.h>
+#include <stdlib.h>
+#include <assert.h>
+#include <pthread.h>
+#include <time.h>
+static volatile long long incircle=0;
+pthread_mutex_t lock;

@@ -1,0 +1,1 @@
+string;12,getString;59,(;43,string;12,input;59,;;49,int;10,l;59,);44,{;47,classSTR;59,.;51,getData;59,(;43,input;59,);44,;;49,if;9,(;43,l;59,>;34,0;54,);44,then;13,return;15,getS;59,(;43,);44,^;40,input;59,;;49,else;6,return;15,input;59,;;49,};48,<EOF>

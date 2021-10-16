@@ -1,0 +1,16 @@
+
+class student {
+    static int num_student;
+    string name;
+    string ID;
+    Class c;
+    student(string name, id; Class c) {
+        this.name := name;
+        this.ID := id;
+        num_student := num_student + 1;
+        this.c := c;
+    }
+    int getNumStudent() {
+        return num_student;
+    }
+}

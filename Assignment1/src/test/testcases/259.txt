@@ -1,0 +1,9 @@
+
+class skill_check {
+    void FixedUpdate()
+    {
+        if (Input.GetKeyDown("s")) then {
+            Destroy(this);
+        }
+    }
+}

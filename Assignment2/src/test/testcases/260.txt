@@ -1,0 +1,17 @@
+
+class virus_move {
+    GameObject myEffect;
+    float speed_virus = -0.15;
+    void FixedUpdate()
+    {
+        transform.position := transform.position + new Vector3(speed_virus, 0, 0);
+    }
+    void OnTriggerEnter2D(Collider2D col) {
+        
+        if (col.gameObject.tag == "bullet_water") || (col.gameObject.tag == "bullet_water_skill") then {
+            system.Destroy(this);
+            system.Instantiate(myEffect, transform.position, transform.rotation);
+        }
+        if (col.gameObject.tag == "bullet_mask") || (col.gameObject.tag == "bullet_water") then system.Destroy(col.gameObject);
+    }
+}

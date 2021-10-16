@@ -1,0 +1,19 @@
+
+class special_student extends student {
+    string[100] list_skill_special;
+    int num_skill;
+    special_student(string name, id; Class c) {
+        this.student(name, id, c);
+        num_skill := 0;
+    }
+    void updateSkill(string skill) {
+        this.list_skill_special[num_skill] := skill; 
+        num_skill := num_skill + 1;
+    }
+    int getNumSkill() {
+        return num_skill;
+    }
+    string[100] getSkill() {
+        return list_skill_special;
+    }
+}

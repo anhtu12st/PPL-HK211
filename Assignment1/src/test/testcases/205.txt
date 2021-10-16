@@ -1,0 +1,7 @@
+class A {
+            final static int a;
+            static final float b;
+            static boolean c;
+            final string str;
+            int[4] arr;
+        }

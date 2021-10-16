@@ -1,0 +1,1 @@
+class A {A(int a,b; float c) { callFunction(a + b - c);}}

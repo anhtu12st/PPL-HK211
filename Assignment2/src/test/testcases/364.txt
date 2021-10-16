@@ -1,0 +1,10 @@
+
+        class array {
+            int[4] element;
+            array(int a,b; float c){
+                element[0]:=a;
+                element[1]:=b;
+                element[2]:=c;
+            }
+        }
+        

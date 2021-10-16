@@ -1,0 +1,5 @@
+
+        class school {
+            int a,b,c,d;
+            static static int c;
+        }

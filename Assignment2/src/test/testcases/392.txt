@@ -1,0 +1,6 @@
+class _ {
+                final float x;
+                void main(){
+                    _ _ ;
+                }
+            }

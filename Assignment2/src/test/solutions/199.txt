@@ -1,0 +1,1 @@
+money;59,=;42,int;10,(;43,input;59,(;43,"nhap vao so tien can doi";55,);44,);44,print;59,(;43,f;59,"{money//50} to 50 ,{money%50//20} to 20 ,{money%50%20//10} to 10 ,{money%50%20%10//5} to 5,{money%50%20%10%5//2} to 2,{money%50%20%10%5%2} to 1";55,);44,<EOF>

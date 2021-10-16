@@ -1,0 +1,27 @@
+
+        class Buildng {
+            float height,weight;
+            int getType() {}
+            Buildng(float height,weight){
+                this.height := height;
+                this.weight := weight;
+            }
+        }
+        class School extends Buildng {
+            int getType(){
+            if(this.height>300) then return this.weight/1000; 
+                else return 0;
+            }
+        }
+        class Skybox extends Buildng {
+            int getType(){
+            if(this.height>300) then return this.weight/1000.e0; else return 0; 
+            }
+        }
+        class Maim {
+            void main(){
+            s := new School(3,4);
+            (b.coo().d.ass()).o();
+            }
+        }
+        

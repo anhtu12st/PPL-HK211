@@ -1,0 +1,1 @@
+for,(,long,long,i,=,0,;,i,<=,num_of_thread,;,i,+,+,),{,if,(,i,!=,num_of_thread,),pthread_create,(,Error Token &

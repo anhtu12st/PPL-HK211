@@ -1,0 +1,26 @@
+
+        # class parent
+        class Exp {
+            float eval() {}
+        }
+        # class intlit and floatlit
+        class IntLit extends Exp {
+            int value;
+            Intlit(int a) {
+                this.value := a;
+            }
+            float eval() {
+                return this.value;
+            }
+        }
+        # class floatlit and floatlit
+        class FloatLit extends Exp {
+            float value;
+            Intlit(float a) {
+                this.value := a;
+            }
+            float eval() {
+                return this.value;
+            }
+        }
+        

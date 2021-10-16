@@ -1,0 +1,20 @@
+
+class linked_list {
+    static node start;
+    linked_list(node s) {
+        this.start := s;
+    }
+    static node getNode(int index; node n) {
+        if index == 0 then
+            return n;
+        else
+            return this.getNode(index - 1, n.getNext());
+    }
+    static void putNode(node n) {
+        if n.getNext() == nil then {
+            int data;
+            io.getInt(data);
+            n.setNext(new node(data, nil));
+        }
+    }
+}

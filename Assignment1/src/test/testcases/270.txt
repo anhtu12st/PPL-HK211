@@ -1,0 +1,40 @@
+
+# STUDENT
+
+class Student {
+        string name;
+        int id;
+        Faculty facul;
+        Subject subs;
+        int nSub;
+        Student(string n; int i; int nS) { name:=n; id:=i; nSub:=nS; }
+        void setNameStudent(string n) { name := n;  }
+        void setID(int n) { id := n;  }
+        void setNameFacultyStudent(string n) { facul := n; }
+        string getNameStudent() { return name;  }
+        int getID() { return id;  }
+        string getNameFacultyStudent() { return facul.getNameFaculty();  }
+        void inputSub(int n) {
+            if (n > 10) then io.print("Number of Subject must less than or equal 10");
+            nSub := n;
+            for i := 0 to nSub do {
+                io.print("Input subject " ^str.toString(i + 1)^ ":\n");
+                subs.inputData();
+            }
+        }
+        bool findSubject(string name) {
+            for i := 0 do
+                if (subs.getNameSubject() == name)then return 1;
+            return 0;
+        }
+        void checkLec() {
+            for i := 0 to nSub do {
+                io.print("\n----------\n");
+                subs.checkLect();
+            }
+        }
+        bool checkFacuSub(string facu; string sub) {
+            if (facul.getNameFaculty() != facu) then   return 0;
+            return this.findSubject(sub);
+        }
+}

@@ -1,0 +1,14 @@
+    void remove(int s, int t) {
+        Interval deleteBus;
+        deleteBus.start = s;
+        deleteBus.end = t;
+        if (max == 0)    return;
+        else if (insertBus(deleteBus)) {
+            insertData(1, s);
+            insertData(0, t);
+            findMax();
+        }
+    }
+    int minPark() {
+        return max;
+    }

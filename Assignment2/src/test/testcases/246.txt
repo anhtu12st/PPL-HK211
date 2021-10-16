@@ -1,0 +1,14 @@
+
+        class C3 extends C2 {
+            final string name;
+            C3(string n, C1 c) {
+                this.name := n;
+                this.C2(c);
+            }
+            string getName() {
+                return "Name of C3: " ^ name;
+            }
+            boolean checkName(string n1) {
+                return n1 == name;
+            }
+        }

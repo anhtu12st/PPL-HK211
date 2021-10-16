@@ -1,0 +1,19 @@
+class Tree {
+            string Body;
+            float height;
+            int age;
+            static string area = "Afri/*c*/a";
+            Tree(string Body; float height) {
+                this. Body := Body;
+                this.height := height;
+            } 
+            }
+            class Leaves extends Tree {
+                static int leaf;
+                string treeName;
+                static void addLeaf(Tree tree; int leaf){
+                    this.leaf := leaf;
+                    treeName := "";
+                }
+                }
+                

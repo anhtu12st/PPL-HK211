@@ -1,0 +1,7 @@
+
+class Faculty {
+        string name;
+        Faculty(string n = "") : name(n) {}
+        string getNameFaculty() { return name;  }
+        void setNameFaculty(string n) { name := n;  }
+}

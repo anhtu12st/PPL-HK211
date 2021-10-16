@@ -1,0 +1,10 @@
+
+class Subject {
+        string name;
+        Lecturer[5] subLecturer;
+        int sLec;
+        Classroom subRoom;
+        Subject(string n) { name:=n; sLec:=0;}
+        string getNameSubject() { return name; }
+        void setNameSubject(string n) { name := n; }
+};

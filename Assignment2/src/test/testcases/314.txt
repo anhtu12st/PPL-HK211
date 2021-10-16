@@ -1,0 +1,12 @@
+class Example1 {
+            static int[10] staticvar;
+            int foo(int a) {
+                return a*2-+1/50 ^ "89" && true;
+            }
+            }
+            class Example2 {
+                void main() {
+                    int[10] a = {1,2,3,4};
+
+                }
+                }

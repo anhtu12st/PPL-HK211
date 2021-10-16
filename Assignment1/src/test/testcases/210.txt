@@ -1,0 +1,4 @@
+
+        class school {
+            static final b;
+        }

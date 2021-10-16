@@ -1,0 +1,22 @@
+
+class PlayerMoment extends MonoBehaviour{
+    CharacterController ctrller;
+    Transform groundCheck;
+    float groundDistance = 0.4;
+    LayerMask groundMask;
+
+    float speed = 12;
+    float gravity = -9.81* 10;
+    float jumpHeight = 7;
+    Vector3 velocity;
+    bool isGrounded;
+    # Update is called once per frame
+    void Update()
+    {
+        isGrounded := Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
+
+        if (isGrounded && velocity.y < 0) then {
+            velocity.y := -2;
+        }
+    }
+}

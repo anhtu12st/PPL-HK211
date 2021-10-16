@@ -1,0 +1,7 @@
+void GameOver() {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
+        /*  UPDATE LATE
+        **  WHEN GAMEOVER, DESTROY UFO
+        **  EXPLOSION :))
+        */
+    }

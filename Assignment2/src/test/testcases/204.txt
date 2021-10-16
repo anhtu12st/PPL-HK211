@@ -1,0 +1,2 @@
+/*def class*/class A {}
+class B extends A{};

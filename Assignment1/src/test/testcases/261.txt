@@ -1,0 +1,10 @@
+
+class drop_victim {
+    static float count_time = 0;
+
+    static void Update()
+    {
+        if (count_time < 5) then transform.position := transform.position + new Vector3(0.5, 0.2, 0);
+        else transform.position := transform.position + new Vector3(0.5, -0.1, 0);
+    }
+}

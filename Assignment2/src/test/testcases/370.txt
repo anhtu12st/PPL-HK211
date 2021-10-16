@@ -1,0 +1,18 @@
+
+        class Employee {
+            void print() {
+                io.print("Finish work");
+            }
+        }
+        class Employee2 {
+            void print(){
+                io.print("Create work");
+            }
+        }
+        class Maim {
+            void main(){
+            s := new Employee2();
+            s.print();
+            }
+        }
+        

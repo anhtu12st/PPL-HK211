@@ -1,0 +1,7 @@
+
+        class Maim {
+            void main(){
+                int[2] a; #Check comment 
+            }
+        }
+        

@@ -1,0 +1,5 @@
+
+        class school {
+            int[3] a = {1, 1 + 2, z + b/2, c};
+            child a = 1.023e123;
+        }

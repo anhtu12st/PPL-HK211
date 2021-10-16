@@ -1,0 +1,6 @@
+class Name{
+            string firstName, lastName, fullName;
+            static void  printName(void name) {
+                this.firstName := name;
+            }
+            }

@@ -1,0 +1,36 @@
+
+class Bank {
+    string bankName;
+
+    void doSomething()
+    {
+        #
+    }
+} class Agribank extends Bank{
+    Agribank()
+    {
+        bankName := "Agribank";
+    }
+    void doSomething()
+    {
+        io.print("Agribank");
+    }
+}  			 class OCB extends Bank{
+    OCB()
+    {
+        bankName := "OCB";
+    }
+    void doSomething()
+    {
+        io.print("OCB");
+    }
+} class Vietcombank extends Bank{
+    Vietcombank()
+    {
+        bankName := "Vietcombank";
+    }
+    void doSomething()
+    {
+        io.print("Vietcombank");
+    }
+}

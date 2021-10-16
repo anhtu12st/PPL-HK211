@@ -1,0 +1,13 @@
+
+        class UnExp extends Exp {
+            string op;
+            float value;
+            UnExp(string op; float value) {
+                this.op := op;
+                this.value := value;
+            }
+            float eval() {
+                if op == "+" then return value;
+                else return value * (-1);
+            }
+        }

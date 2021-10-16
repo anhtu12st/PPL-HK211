@@ -1,0 +1,20 @@
+class Name{
+             string firstName, lastName, fullName;
+          static void  printName(int name, _final) {
+                final int count = 0;
+                this.firstName := name;
+                {
+                if flag then
+                     {io.writeStrLn("Expression is true");
+                     io.writeStrLn ("Expression is false");}
+                     else if flag then
+                     {io.writeStrLn("Expression is true");
+                     io.writeStrLn ("Expression is false");}}
+                     for _ := i to 50 do return _;
+            }
+            void main(){
+                this.aPI := 3.14;
+                value := x.foo(5);
+                l[3] := value * 2[2];
+            }
+           }

@@ -1,0 +1,1 @@
+Program([ClassDecl(Id(Buildng),[AttributeDecl(Instance,VarDecl(Id(height),FloatType)),AttributeDecl(Instance,VarDecl(Id(weight),FloatType)),MethodDecl(Id(getType),Instance,[],IntType,Block([],[]))]),ClassDecl(Id(School),Id(Buildng),[MethodDecl(Id(getType),Instance,[],IntType,Block([],[Return(BinaryOp(/,FieldAccess(Self(),Id(weight)),IntLit(1000)))]))])])

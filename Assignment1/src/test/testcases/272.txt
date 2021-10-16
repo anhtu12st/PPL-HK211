@@ -1,0 +1,96 @@
+
+class mainClass {
+int main() {
+    Faculty facul;
+    Lecturer lect;
+    Student stud;
+    Classroom classR;
+    Subject subj;
+    int sFacu, sLect, sStud, sRoom, sSubj;
+    int n;
+
+    #=========================FACULTY=========================//
+    io.print("=============================================================\n");
+    io.print("How many Faculties? ");
+    io.getInt(n);
+    sFacu := n;
+    for i := 0 to n do {
+        string name;
+        io.print("-----------------------------\nInput details for Faculty " ^ str.toString(i + 1) ^ ":\n");
+        io.print("Input name of Faculty: ");
+        io.fflush(stdin);
+        io.getline(name);
+        facul.setNameFaculty(name);
+    }
+    #=======================LECTURER=======================//
+    io.print("=============================================================\n");
+    io.print("How many Lecturer? ");
+    io.getInt(n);
+    sLect := n;
+    for i := 0 to i<n do {
+        string name;
+        io.print("------------------------------\n");
+        io.print("Input details for Lecturer " ^ str.toString(i + 1) ^ ":\n");
+        io.print("Input name of Lecturer: ");
+        io.fflush(stdin);
+        io.getline(name);
+        this.lectsetNameLecturer(name);
+        io.print("Input Lecturer's Faculty: ");
+        io.fflush(stdin);
+        io.getline(name);
+        lect.setNameFacultyOfLecturer(name);
+    }
+    #=========================STUDENT=========================//
+    io.print("\n=============================================================\n");
+    io.print("How many Student? ");
+    io.getInt(n);
+    sStud := n;
+    for i := 0 to n do {
+        string name;
+        int id;
+        io.print("----------------------------------------\n");
+        io.print("Input details for Student " ^ str.toString(i + 1) ^ ":\n");
+        io.print("Input name of Student: ");
+        io.fflush(stdin);
+        io.getline(name);
+        stud.setNameStudent(name);
+        io.print("Input ID of Student: ");
+        io.getInt(id);
+        stud.setID(id);
+        io.print("Input Faculty of Student: ");
+        io.fflush(stdin);
+        io.getline(name);
+        stud.setNameFacultyStudent(name);
+        io.print("Input number of Subject: ");
+        io.getInt(id);
+        io.print("--------------------\n");
+        stud.inputSub(id);
+    }
+
+    #=========================CLASSROOM===========================//
+    io.print("\n=============================================================\n");
+    io.print("How many Classroom? ");
+    io.getInt(n);
+    sRoom := n;
+    for i:=0 to n do {
+        string name;
+        io.print("---------------------------------\n");
+        io.print("Input details for Classroom " ^ str.toString(i + 1) ^ ":\n");
+        io.print("Input name of Classroom: ");
+        io.fflush(stdin);
+        io.getline(name);
+        classR.setNameClassroom(name);
+    }
+
+    #=========================SUBJECT============================//
+    io.print("\n=============================================================\n");
+    io.print("How many Subject? ");
+    io.getInt(n);
+    sSubj := n;
+    subj.inputData();
+    io.print("\n=============================================================\n");
+    return 0;
+
+}
+
+}

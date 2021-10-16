@@ -1,0 +1,1 @@
+Program([ClassDecl(Id(Exmap),[MethodDecl(Id(<init>),Instance,[],Block([],[AssignStmt(ArrayCell(BinaryOp(+,Id(a),Id(b)),IntLit(3)),IntLit(50))]))])])

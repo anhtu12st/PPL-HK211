@@ -1,0 +1,1 @@
+Program([ClassDecl(Id(Example1),Id(_extends),[MethodDecl(Id(<init>),Instance,[param(Id(Example1),ClassType(Id(Example1)))],Block([VarDecl(Id(Example1),ClassType(Id(Example1)),BinaryOp(-,FieldAccess(Self(),Id(nilx)),FieldAccess(Id(nilx),Id(thiss))))],[AssignStmt(Id(example1),ArrayCell(CallExpr(Id(a),Id(foo7),[]),IntLit(10)))]))])])

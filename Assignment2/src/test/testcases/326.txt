@@ -1,0 +1,24 @@
+class Animal {
+            static int age;
+            string name;
+            string fur;
+            int[10] mong;
+            Animal(int age; string name,fur; int[0] mong){
+                this.age := age;
+                this.fur := fur;
+                for i := 0 to 9 do this.mong[i] := mong[i];
+            }
+            }
+            class Cat extends Animal {
+                Example1[5] x; # array
+                Example1 y;
+                static void foo() {
+                    System.out.println("fnsjd");
+                    this.y.name := "Cat \n";
+                } 
+                void main(){
+                        Cat m;
+                        m.foo();
+                    }
+                }
+                
