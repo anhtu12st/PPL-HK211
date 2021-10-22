@@ -1,17 +1,1 @@
-Program([
-  ClassDecl(
-    Id(Name),
-    [
-      AttributeDecl(Instance,VarDecl(Id(firstName),StringType)),
-      AttributeDecl(Instance,VarDecl(Id(lastName),StringType)),
-      AttributeDecl(Instance,VarDecl(Id(fullName),StringType)),
-      MethodDecl(
-        Id(printName),
-        Static,
-        [
-          param(Id(<missing ID>),ClassType(Id(name)))
-        ],
-        VoidType,
-        Block([],[
-          AssignStmt(FieldAccess(Self(),Id(firstName)),Id(name))
-        ]))])])
+Program([ClassDecl(Id(Name),[AttributeDecl(Instance,VarDecl(Id(firstName),StringType)),AttributeDecl(Instance,VarDecl(Id(lastName),StringType)),AttributeDecl(Instance,VarDecl(Id(fullName),StringType)),MethodDecl(Id(printName),Static,[param(Id(<missing ID>),ClassType(Id(name)))],VoidType,Block([],[AssignStmt(FieldAccess(Self(),Id(firstName)),Id(name))]))])])

@@ -1,0 +1,12 @@
+
+        class XXX {
+            void method(){
+                a := a == a;
+                a := a != a;
+                a := a > a;
+                a := a < a;
+                a := a >= a;
+                a := a <= a;
+            }
+        }
+        

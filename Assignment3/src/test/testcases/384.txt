@@ -1,0 +1,7 @@
+
+        class XXX {
+            void method(){
+                a := +-b+a*b*(-a+b)\a;
+            }
+        }
+        

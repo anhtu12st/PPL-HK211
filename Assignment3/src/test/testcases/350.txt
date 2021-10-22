@@ -1,0 +1,7 @@
+
+        class XXX {
+            void method(){
+                a := x.x[0];
+            }
+        }
+        

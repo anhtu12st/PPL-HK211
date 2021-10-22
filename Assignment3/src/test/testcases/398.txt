@@ -1,0 +1,7 @@
+
+        class XXX {
+            void method(){
+                a[3+x.foo(true)] := a[b[2]] +3;
+            }
+        }
+        

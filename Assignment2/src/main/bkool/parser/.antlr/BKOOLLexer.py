@@ -1,4 +1,4 @@
-# Generated from /Users/tu/Desktop/PPL/Assignment2/src/main/bkool/parser/BKOOL.g4 by ANTLR 4.8
+# Generated from /home/tu/PPL-HK211/Assignment2/src/main/bkool/parser/BKOOL.g4 by ANTLR 4.8
 from antlr4 import *
 from io import StringIO
 from typing.io import TextIO

@@ -1,0 +1,7 @@
+
+        class XXX {
+            void method(){
+                x.x(1,a+b,a[0]);
+            }
+        }
+        
