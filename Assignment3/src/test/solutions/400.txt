@@ -1,1 +1,1 @@
-[]
+Redeclared Class: XXX
