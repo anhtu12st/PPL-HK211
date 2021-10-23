@@ -2,10 +2,20 @@
 """
  * @author nhphung
 """
-from AST import *
+import sys
+# from AST import *
 from Visitor import *
 from Utils import Utils
 from StaticError import *
+
+if not './main/bkool/utils/' in sys.path:
+    from main.bkool.utils.AST import *
+    from main.bkool.utils.Visitor import *
+    from main.bkool.utils.Utils import Utils
+else:
+    from AST import *
+    from Visitor import *
+    from Utils import Utils
 
 
 class MType:
