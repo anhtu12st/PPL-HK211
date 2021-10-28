@@ -1,3 +1,1 @@
-int main () {
-            putIntLn();
-        }
+Program([ClassDecl(Id(XXX),[AttributeDecl(Instance,VarDecl(Id(x),IntType)),AttributeDecl(Static,ConstDecl(Id(x),FloatType,FloatLit(0.1)))])])

@@ -147,6 +147,7 @@ class TestChecker:
             res = checker.check()
             dest.write(str(list(res)))
         except StaticError as e:
+            # print(f"{num}: {e}")
             dest.write(str(e))
         finally:
             dest.close()

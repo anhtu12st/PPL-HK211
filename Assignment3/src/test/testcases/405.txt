@@ -1,1 +1,6 @@
-Program(List(FuncDecl(Id(main),List(),IntType,Block(List(),List(CallExpr(Id(putIntLn),List()))))))
+
+        class XXX {
+            int x;
+            int y (int z; float t) { int z = 2; }
+        }
+        
