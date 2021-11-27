@@ -54,7 +54,7 @@ class StaticChecker(BaseVisitor):
         table.currentclass = ast.classname.name
         return [self.visit(mem, table) for mem in ast.memlist]
     def visitAttributeDecl(self, ast: AttributeDecl, table: SymbolTable):
-        pass
+        self.visit(ast.decl, table)
     def visitMethodDecl(self, ast: MethodDecl, table: SymbolTable):
         name = ast.name.name
         new_table = SymbolTable([], next=table, currentmethod=name)
@@ -87,18 +87,28 @@ class StaticChecker(BaseVisitor):
             self.visit(stmt, new_table)
     def visitVarDecl(self, ast: VarDecl, table: SymbolTable):
         name = ast.variable.name
+        if self.is_valid_class_type(ast.varType) == False:
+            raise Undeclared(Class(), ast.varType.classname.name)
         type = str(ast.varType)
         is_const = False
-        if name in map(lambda x: x.name, table.symbols):
+        if table.next is None:
+            if isinstance(ast.varInit, Id):
+                raise Undeclared(Identifier(), name)
+        if name in map(lambda x: x.name, table.symbols) and table.next is not None:
             raise Redeclared(Variable(), name)
         if ast.varInit is not None and False == self.compareType(type, self.visit(ast.varInit, table)[0]):
             raise TypeMismatchInStatement(ast)
         return name, type, is_const
     def visitConstDecl(self, ast: ConstDecl, table: SymbolTable):
         name = ast.constant.name
+        if self.is_valid_class_type(ast.constType) == False:
+            raise Undeclared(Class(), ast.constType.classname.name)
         type = str(ast.constType)
         is_const = True
-        if name in map(lambda x: x.name, table.symbols):
+        if table.next is None:
+            if isinstance(ast.value, Id):
+                raise Undeclared(Identifier(), name)
+        if name in map(lambda x: x.name, table.symbols) and table.next is not None:
             raise Redeclared(Constant(), name)
         if ast.value is None:
             raise IllegalConstantExpression(None)
@@ -195,6 +205,10 @@ class StaticChecker(BaseVisitor):
         if method_symbol.stype.kind != kind:
             raise IllegalMemberAccess(CallExpr(ast.obj, ast.method, ast.param))
     def visitId(self, ast: Id, table: SymbolTable):
+        if table.next is None:
+            for x in table.symbols:
+                if x.name == ast.name:
+                    return x.stype.returnType, x.stype.is_const
         while table.next is not None:
             for x in table.symbols:
                 if x.name == ast.name:
@@ -230,6 +244,8 @@ class StaticChecker(BaseVisitor):
             for sym in class_table.symbols:
                 if sym.name == fieldname and sym.kind == str(Attribute()):
                     field_symbol = sym
+                    if sym.kind != str(Attribute()):
+                        TypeMismatchInExpression(ast)
             class_name = self.classes.get(class_name).get('parentname')
         if field_symbol is None:
             raise Undeclared(Attribute(), fieldname)
@@ -300,8 +316,10 @@ class StaticChecker(BaseVisitor):
             class_table: SymbolTable = self.classes.get(
                 class_name).get('table')
             for sym in class_table.symbols:
-                if sym.name == method_name and sym.kind == str(Method()):
+                if sym.name == method_name:
                     method_symbol = sym
+                    if sym.kind != str(Method()):
+                        raise TypeMismatchInExpression(ast)
             class_name = self.classes.get(class_name).get('parentname')
         if method_symbol is None:
             raise Undeclared(Method(), method_name)
@@ -374,6 +392,10 @@ class StaticChecker(BaseVisitor):
                     return True
                 rhs_parentclass = self.classes.get(rhs_parentclass).get('parentname')
         return False
+    def is_valid_class_type(self, type):
+        if isinstance(type, ClassType):
+            return type.classname.name in self.classes
+        return True
     @staticmethod
     def checkIsConstant(lhs, table: SymbolTable):
         if isinstance(lhs, Id):
@@ -445,10 +467,6 @@ class GlobalEnvironment(BaseVisitor):
         is_const = False
         if name in map(lambda x: x.name, table.symbols):
             raise Redeclared(Attribute(), name)
-        if ast.varInit is not None and False == self.compareType(type, self.visit(ast.varInit, table)[0]):
-            # Need to check if we can type coercion
-            # raise TypeMismatchInStatement()
-            pass
         return name, type, is_const
     def visitConstDecl(self, ast: ConstDecl, table: SymbolTable):
         name = ast.constant.name
@@ -456,197 +474,8 @@ class GlobalEnvironment(BaseVisitor):
         is_const = True
         if name in map(lambda x: x.name, table.symbols):
             raise Redeclared(Attribute(), name)
-        if ast.value is None:
-            raise IllegalConstantExpression(None)
-        type_value, is_value_const = self.visit(ast.value, table)
-        if is_value_const != True:
-            raise IllegalConstantExpression(ast.value)
-        if self.compareType(type, type_value) == False:
-            raise TypeMismatchInConstant(ast)
         return name, type, is_const
-    def compareType(self, lhs, rhs):
-        if lhs == rhs:
-            return True
-        if lhs == str(IntType()):
-            return rhs == str(IntType())
-        if lhs == str(FloatType()):
-            return rhs == str(FloatType()) or rhs == str(IntType())
-        if lhs == str(BoolType()):
-            return rhs == str(BoolType())
-        if lhs[:9] == "ArrayType" and lhs[10] == rhs[10]:
-            lhs_ele_type = lhs[10:-1].split(',')[1]
-            rhs_ele_type = rhs[10:-1].split(',')[1]
-            return self.compareType(lhs_ele_type, rhs_ele_type)
-        lhs_class = StaticChecker.getNameFromClassTypeName(lhs)
-        rhs_class = StaticChecker.getNameFromClassTypeName(rhs)
-        if lhs_class is None or rhs_class is None:
-            return False
-        else:
-            rhs_parentclass = self.classes.get(rhs_class).get('parentname')
-            while rhs_parentclass is not None:
-                if rhs_parentclass == lhs_class:
-                    return True
-                rhs_parentclass = self.classes.get(rhs_parentclass).get('parentname')
-        return False
-    def visitId(self, ast: Id, table: SymbolTable):
-        while table.next is not None:
-            for x in table.symbols:
-                if x.name == ast.name:
-                    return x.stype.returnType, x.stype.is_const
-            table = table.next
-        raise Undeclared(Identifier(), ast.name)
-    def visitArrayCell(self, ast: ArrayCell, table: SymbolTable):
-        arr_type, is_array_const = self.visit(ast.arr, table)
-        idx_type, _ = self.visit(ast.idx, table)
-        if arr_type[:9] != "ArrayType" or idx_type != str(IntType()):
-            raise TypeMismatchInExpression(ast)
-        return arr_type.split(',')[1][:-1], is_array_const
-    def visitFieldAccess(self, ast: FieldAccess, table: SymbolTable):
-        type_obj = None
-        kind = str(Instance())
-        if isinstance(ast.obj, Id):
-            try:
-                type_obj = self.visit(ast.obj, table)[0]
-                kind = str(Instance())
-            except Undeclared:
-                if ast.obj.name not in self.classes:
-                    raise Undeclared(Identifier(), ast.obj.name)
-                type_obj = str(ClassType(Id(ast.obj.name)))
-                kind = str(Static())
-        else:
-            type_obj = self.visit(ast.obj, table)[0]
-        class_name = StaticChecker.getNameFromClassTypeName(type_obj)
-        if class_name is None:
-            raise TypeMismatchInExpression(ast)
-        fieldname = ast.fieldname.name
-        field_symbol = None
-        while field_symbol is None and class_name is not None:
-            class_table: SymbolTable = self.classes.get(class_name).get('table')
-            for sym in class_table.symbols:
-                if sym.name == fieldname and sym.kind == str(Attribute()):
-                    field_symbol = sym
-            class_name = self.classes.get(class_name).get('parentname')
-        if field_symbol is None:
-            raise Undeclared(Attribute(), fieldname)
-        if field_symbol.stype.returnType == str(VoidType()):
-            raise TypeMismatchInExpression(ast)
-        if field_symbol.stype.kind != kind:
-            raise IllegalMemberAccess(ast)
-        return field_symbol.stype.returnType, False
-    def visitBinaryOp(self, ast: BinaryOp, table: SymbolTable):
-        op = ast.op
-        type_left, is_left_const = self.visit(ast.left, table)
-        type_right, is_right_const = self.visit(ast.right, table)
-        if op in ['%', '\\']:
-            if type_left == type_right == str(IntType()):
-                return type_left, is_left_const and is_right_const
-        elif op in ['/']:
-            if type_left in [str(IntType()), str(FloatType())] and type_right in [str(IntType()), str(FloatType())]:
-                return str(FloatType()), is_left_const and is_right_const
-        elif op in ['+', '-', '*']:
-            if type_left == type_right == str(IntType()):
-                return type_left, is_left_const and is_right_const
-            elif type_left in [str(IntType()), str(FloatType())] and type_right in [str(IntType()), str(FloatType())]:
-                return str(FloatType()), is_left_const and is_right_const
-        elif op in ['&&', '||']:
-            if type_left == type_right == str(BoolType()):
-                return type_left, is_left_const and is_right_const
-        elif op in ['==', '!=']:
-            if type_left == type_right == str(IntType()) or type_left == type_right == str(BoolType()):
-                return str(BoolType()), is_left_const and is_right_const
-        elif op in ['>', '<', '<=', '>=']:
-            if type_left in [str(IntType()),str(FloatType())] and type_right in [str(IntType()),str(FloatType())]:
-                return str(BoolType()) , is_left_const and is_right_const
-        elif op in ['^']:
-            if type_left == type_right == str(StringType()):
-                return str(StringType()), is_left_const and is_right_const
-        raise TypeMismatchInExpression(ast)
-    def visitUnaryOp(self, ast: UnaryOp, table: SymbolTable):
-        op = ast.op
-        type_body = self.visit(ast.body, table)
-        if op in ['+', '-']:
-            if type_body not in [str(IntType()), str(FloatType())]:
-                raise TypeMismatchInExpression(ast)
-        elif op in ['!']:
-            if type_body != str(BoolType()):
-                raise TypeMismatchInExpression(ast)
-        return type_body
-    def visitCallExpr(self, ast: CallExpr, table: SymbolTable):
-        type_obj = None
-        kind = str(Instance())
-        if isinstance(ast.obj, Id):
-            try:
-                type_obj = self.visit(ast.obj, table)[0]
-                kind = str(Instance())
-            except Undeclared:
-                if ast.obj.name not in self.classes:
-                    raise Undeclared(Identifier(), ast.obj.name)
-                type_obj = str(ClassType(Id(ast.obj.name)))
-                kind = str(Static())
-        else:
-            type_obj = self.visit(ast.obj, table)[0]
-        class_name = StaticChecker.getNameFromClassTypeName(type_obj)
-        if class_name is None:
-            raise TypeMismatchInExpression(ast)
-        method_name = ast.method.name
-        type_param = list(map(lambda x: self.visit(x, table)[0], ast.param))
-        method_symbol = None
-        while method_symbol is None and class_name is not None:
-            class_table: SymbolTable = self.classes.get(
-                class_name).get('table')
-            for sym in class_table.symbols:
-                if sym.name == method_name and sym.kind == str(Method()):
-                    method_symbol = sym
-            class_name = self.classes.get(class_name).get('parentname')
-        if method_symbol is None:
-            raise Undeclared(Method(), method_name)
-        method_param = method_symbol.stype.paramType
-        if len(type_param) != len(method_param):
-            raise TypeMismatchInExpression(ast)
-        for i in range(len(type_param)):
-            if False == self.compareType(method_param[i], type_param[i]):
-                raise TypeMismatchInExpression(ast)
-        if method_symbol.stype.returnType == str(VoidType()):
-            raise TypeMismatchInExpression(ast)
-        if method_symbol.stype.kind != kind:
-            raise IllegalMemberAccess(ast)
-        return method_symbol.stype.returnType,False
-    def visitNewExpr(self, ast: NewExpr, table: SymbolTable):
-        classname = ast.classname.name
-        if classname not in self.classes:
-            raise Undeclared(Class(), classname)
-        table = self.classes.get(classname).get('table')
-        type_param = list(map(lambda x: self.visit(x, table), ast.param))
-        method_symbol = None
-        for sym in table.symbols:
-            if sym.name == "<init>":
-                method_symbol = sym
-        params = method_symbol.stype.paramType
-        if type_param != params:
-            raise TypeMismatchInExpression(ast)
-        return str(ClassType(ast.classname)),False
-    def visitIntLiteral(self, ast: IntLiteral, table: SymbolTable):
-        return str(IntType()),True
-    def visitFloatLiteral(self, ast: FloatLiteral, table: SymbolTable):
-        return str(FloatType()),True
-    def visitStringLiteral(self, ast: StringLiteral, table: SymbolTable):
-        return str(StringType()),True
-    def visitBooleanLiteral(self, ast: BooleanLiteral, table: SymbolTable):
-        return str(BoolType()),True
-    def visitNullLiteral(self, ast: NullLiteral, table: SymbolTable):
-        return str(NullLiteral()),True
-    def visitSelfLiteral(self, ast: SelfLiteral, table: SymbolTable):
-        while table.next is not None:
-            table = table.next
-        return str(ClassType(Id(table.currentclass))),False
-    def visitArrayLiteral(self, ast: ArrayLiteral, table: SymbolTable):
-        list_array_type = list(map(lambda x: self.visit(x, table), ast.value))
-        if len(list_array_type) > 1:
-            for i in range(1, len(list_array_type)):
-                if list_array_type[i-1][0] != list_array_type[i][0]:
-                    raise IllegalArrayLiteral(ast)
-        return str(ArrayType(len(list_array_type), list_array_type[0][0] if len(list_array_type) > 0 else None)),reduce(lambda acc,ele: ele[1] and acc, list_array_type, True)
-        
+
 """
     global_env = {
         'io': {
