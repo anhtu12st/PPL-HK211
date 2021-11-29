@@ -1,9 +1,16 @@
 from functools import reduce
-
+import sys
 from Frame import Frame
 from abc import ABC
-from Visitor import * 
-from AST import *
+# from Visitor import *
+# from AST import *
+
+if not './main/bkool/utils/' in sys.path:
+    from main.bkool.utils.Visitor import *
+    from main.bkool.utils.AST import *
+else:
+    from Visitor import *
+    from AST import *
 
 class MType:
     def __init__(self,partype,rettype):
