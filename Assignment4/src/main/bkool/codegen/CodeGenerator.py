@@ -19,7 +19,6 @@ class MType:
     self.partype = partype
     self.rettype = rettype
 
-
 class Symbol:
   def __init__(self, name, mtype, value=None):
     self.name = name
@@ -106,15 +105,14 @@ class CodeGenVisitor(BaseVisitor):
     [self.visit(i, c)for i in ast.decl]
 
   def visitClassDecl(self, ast: ClassDecl, c):
-
     self.className = ast.classname.name
     parentName = ast.parentname if ast.parentname is not None else "java.lang.Object"
     self.emit = Emitter(self.path+"/" + self.className + ".j")
     self.emit.printout(self.emit.emitPROLOG(self.className, parentName))
     #TODO: assume that class have only methods for now, need to update for attribute
     [self.visit(ele, SubBody(None, self.env)) for ele in ast.memlist if type(ele) == MethodDecl]
-    # generate default constructor
-    self.genMETHOD(MethodDecl(Instance(), Id("<init>"), list(), None, Block([], [])), c, Frame("<init>", VoidType()))
+    if "<init>" not in list(map(lambda x: x.name.name, ast.memlist)):
+      self.genMETHOD(MethodDecl(Instance(), Id("<init>"), list(), None, Block([], [])), c, Frame("<init>", VoidType()))
     self.emit.emitEPILOG()
 
   def genMETHOD(self, consdecl, o, frame):
@@ -155,11 +153,46 @@ class CodeGenVisitor(BaseVisitor):
     self.emit.printout(self.emit.emitENDMETHOD(frame))
     frame.exitScope()
 
-  def visitMethodDecl(self, ast, o):
+  def visitMethodDecl(self, ast: MethodDecl, o):
     frame = Frame(ast.name, ast.returnType)
     self.genMETHOD(ast, o.sym, frame)
 
-  def visitCallStmt(self, ast, o):
+  def visitAttributeDecl(self, ast: AttributeDecl, ctx):
+    pass
+  def visitConstDecl(self, ast: ConstDecl, ctx):
+    pass
+  def visitVarDecl(self, ast: VarDecl, ctx):
+    pass
+  def visitBlock(self, ast: Block, ctx):
+    pass
+  def visitAssign(self, ast: Assign, ctx):
+    pass
+  def visitIf(self, ast: If, ctx):
+    pass
+  def visitFor(self, ast: For, ctx):
+    pass
+  def visitBreak(self, ast: Break, ctx):
+    pass
+  def visitContinue(self, ast: Continue, ctx):
+    pass
+  def visitReturn(self, ast: Return, ctx):
+    pass
+  def visitCallStmt(self, ast: CallStmt, ctx):
+    pass
+  def visitId(self, ast: Id, ctx):
+    pass
+  def visitArrayCell(self, ast: ArrayCell, ctx):
+    pass
+  def visitFieldAccess(self, ast: FieldAccess, ctx):
+    pass
+  def visitUnaryOp(self, ast: UnaryOp, ctx):
+    pass
+  def visitCallExpr(self, ast: CallExpr, ctx):
+    pass
+  def visitNewExpr(self, ast: NewExpr, ctx):
+    pass
+
+  def visitCallStmt(self, ast: CallStmt, o):
     ctxt = o
     frame = ctxt.frame
     nenv = ctxt.sym
@@ -173,14 +206,25 @@ class CodeGenVisitor(BaseVisitor):
     self.emit.printout(in_[0])
     self.emit.printout(self.emit.emitINVOKESTATIC(cname + "/" + ast.method.name, ctype, frame))
 
-  def visitIntLiteral(self, ast, o):
-    return self.emit.emitPUSHICONST(ast.value, o.frame), IntType()
-
   def visitBinaryOp(self, ast, o):
     e1c, e1t = self.visit(ast.left, o)
     e2c, e2t = self.visit(ast.right, o)
     return e1c + e2c + self.emit.emitADDOP(ast.op, e1t, o.frame), e1t
 
+  def visitIntLiteral(self, ast, o):
+    return self.emit.emitPUSHICONST(ast.value, o.frame), IntType()
+  def visitFloatLiteral(self, ast: FloatLiteral, o):
+    return self.emit.emitPUSHFCONST(str(ast.value), o.frame), FloatType()
+  def visitStringLiteral(self, ast: StringLiteral, o):
+    return self.emit.emitPUSHCONST(str(ast.value), StringType(), o.frame), StringType()
+  def visitBooleanLiteral(self, ast: BooleanLiteral, o):
+    return self.emit.emitPUSHICONST(str(ast.value), o.frame), BoolType()
+  def visitNullLiteral(self, ast: NullLiteral, o):
+    pass
+  def visitSelfLiteral(self, ast: SelfLiteral, o):
+    pass
+  def visitArrayLiteral(self, ast: ArrayLiteral, o):
+    pass
 
 class GlobalEnvironment(BaseVisitor):
   """
@@ -207,10 +251,7 @@ class GlobalEnvironment(BaseVisitor):
     members = []
     o[ast.classname.name]['members'] = members
     self.currentClass = ast.classname.name
-    lst_name = [self.visit(x, members) for x in ast.memlist]
-    if "<init>" not in map(lambda x: x, lst_name):
-      members.append(Symbol('<init>', MType(
-        [], None), CName(ast.classname.name)))
+    [self.visit(x, members) for x in ast.memlist]
 
   def visitMethodDecl(self, ast: MethodDecl, members):
     name = ast.name.name

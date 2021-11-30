@@ -1,9 +1,17 @@
+import sys
 from Utils import *
 #from StaticCheck import *
 #from StaticError import *
 import CodeGenerator as cgen
 from MachineCode import JasminCode
-from AST import *
+# from AST import *
+
+if not './main/bkool/utils/' in sys.path:
+  from main.bkool.utils.Visitor import *
+  from main.bkool.utils.AST import *
+else:
+  from Visitor import *
+  from AST import *
 
 
 
