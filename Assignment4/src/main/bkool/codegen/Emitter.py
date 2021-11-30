@@ -17,6 +17,8 @@ class Emitter():
         typeIn = type(inType)
         if typeIn is IntType:
             return "I"
+        elif typeIn is FloatType:
+            return "F"
         elif typeIn is StringType:
             return "Ljava/lang/String;"
         elif typeIn is VoidType:
@@ -65,8 +67,8 @@ class Emitter():
         f = float(in_)
         frame.push()
         rst = "{0:.4f}".format(f)
-        if rst == "0.0" or rst == "1.0" or rst == "2.0":
-            return self.jvm.emitFCONST(rst)
+        if rst == "0.0000" or rst == "1.0000" or rst == "2.0000":
+            return self.jvm.emitFCONST(rst[:3])
         else:
             return self.jvm.emitLDC(in_)           
 
@@ -96,10 +98,15 @@ class Emitter():
         #..., arrayref, index, value -> ...
         
         frame.pop()
-        if type(in_) is IntType:
+
+        typeIn = type(inType)
+        if typeIn is IntType:
             return self.jvm.emitIALOAD()
-        #elif type(in_) is cgen.ArrayPointerType or type(in_) is cgen.ClassType or type(in_) is StringType:
-        elif type(in_) is ClassType or type(in_) is StringType:
+        elif typeIn is FloatType:
+            return self.jvm.emitFALOAD()
+        elif typeIn is StringType:
+            return self.jvm.emitAALOAD()
+        elif typeIn is ClassType:
             return self.jvm.emitAALOAD()
         else:
             raise IllegalOperandException(str(in_))
@@ -112,10 +119,14 @@ class Emitter():
         frame.pop()
         frame.pop()
         frame.pop()
-        if type(in_) is IntType:
+        typeIn = type(inType)
+        if typeIn is IntType:
             return self.jvm.emitIASTORE()
-        #elif type(in_) is cgen.ArrayPointerType or type(in_) is cgen.ClassType or type(in_) is StringType:
-        elif type(in_) is ClassType or type(in_) is StringType:
+        elif typeIn is FloatType:
+            return self.jvm.emitFASTORE()
+        elif typeIn is StringType:
+            return self.jvm.emitAASTORE()
+        elif typeIn is ClassType:
             return self.jvm.emitAASTORE()
         else:
             raise IllegalOperandException(str(in_))
@@ -145,10 +156,17 @@ class Emitter():
         #... -> ..., value
         
         frame.push()
-        if type(inType) is IntType:
+        
+        typeIn = type(inType)
+        if typeIn is IntType:
             return self.jvm.emitILOAD(index)
-        #elif type(inType) is cgen.ArrayPointerType or type(inType) is cgen.ClassType or type(inType) is StringType:
-        elif type(inType) is ClassType or type(inType) is StringType:
+        elif typeIn is FloatType:
+            return self.jvm.emitFLOAD(index)
+        elif typeIn is ArrayType:
+            return self.jvm.emitALOAD(index)
+        elif typeIn is StringType:
+            return self.jvm.emitALOAD(index)
+        elif typeIn is ClassType:
             return self.jvm.emitALOAD(index)
         else:
             raise IllegalOperandException(name)
@@ -177,11 +195,16 @@ class Emitter():
         #..., value -> ...
         
         frame.pop()
-
-        if type(inType) is IntType:
+        typeIn = type(inType)
+        if typeIn is IntType:
             return self.jvm.emitISTORE(index)
-        #elif type(inType) is cgen.ArrayPointerType or type(inType) is cgen.ClassType or type(inType) is StringType:
-        elif  type(inType) is ClassType or type(inType) is StringType:
+        elif typeIn is FloatType:
+            return self.jvm.emitFSTORE(index)
+        elif typeIn is ArrayType:
+            return self.jvm.emitASTORE(index)
+        elif typeIn is StringType:
+            return self.jvm.emitASTORE(index)
+        elif typeIn is ClassType:
             return self.jvm.emitASTORE(index)
         else:
             raise IllegalOperandException(name)
@@ -315,12 +338,14 @@ class Emitter():
         label1 = frame.getNewLabel()
         label2 = frame.getNewLabel()
         result = list()
-        result.append(emitIFTRUE(label1, frame))
-        result.append(emitPUSHCONST("true", in_, frame))
-        result.append(emitGOTO(label2, frame))
-        result.append(emitLABEL(label1, frame))
-        result.append(emitPUSHCONST("false", in_, frame))
-        result.append(emitLABEL(label2, frame))
+        result.append(self.emitIFTRUE(label1, frame))
+        result.append(self.emitPUSHICONST("true", frame))
+        # result.append(emitPUSHCONST("true", in_, frame))
+        result.append(self.emitGOTO(label2, frame))
+        result.append(self.emitLABEL(label1, frame))
+        result.append(self.emitPUSHICONST("false", frame))
+        # result.append(emitPUSHCONST("false", in_, frame))
+        result.append(self.emitLABEL(label2, frame))
         return ''.join(result)
 
     '''
@@ -598,7 +623,7 @@ class Emitter():
         #label: Int
         #frame: Frame
 
-        return self.jvm.emitGOTO(label)
+        return self.jvm.emitGOTO(str(label))
 
     ''' generate some starting directives for a class.<p>
     *   .source MPC.CLASSNAME.java<p>
