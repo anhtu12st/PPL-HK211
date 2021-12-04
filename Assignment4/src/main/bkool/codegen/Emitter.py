@@ -274,6 +274,23 @@ class Emitter():
         frame.pop()
         return self.jvm.emitPUTFIELD(lexeme, self.getJVMType(in_))
 
+    def emitEXPR(expr: Expr,typ:Type):
+        typee = type(typ)
+        if typee is IntType:
+            return str(expr)
+        elif typee is FloatType:
+            if type(expr) is IntLiteral:
+                return str(float(expr.value))
+            return str(expr.value)
+        elif typee is StringType:
+            return expr.value
+        else:
+            if str(expr.value) == "true":
+                return "1"
+            else:
+                return "0"
+
+
     ''' generate code to invoke a static method
     *   @param lexeme the qualified name of the method(i.e., class-name/method-name)
     *   @param in the type descriptor of the method.

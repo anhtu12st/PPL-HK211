@@ -5,7 +5,9 @@ from AST import *
 
 class CheckCodeGenSuite(unittest.TestCase):
     def test_bkool_int_ast(self):
-        input = """class BKoolClass {static void main() {io.writeInt(1);}}"""
+        input = """class BKoolClass {
+            static void main() {io.writeInt(1);}
+            }"""
         expect = "1"
         self.assertTrue(TestCodeGen.test(input,expect,500))
     def test_bkool_bin_ast(self):
