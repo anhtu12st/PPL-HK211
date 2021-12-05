@@ -26,7 +26,7 @@ class Symbol:
     self.kind = kind
 
   def __str__(self):
-    return "Symbol("+self.name+","+str(self.mtype)+","+str(self.kind)+")"
+    return "Symbol("+self.name+","+str(self.mtype)+","+str(self.value)+","+str(self.kind)+")"
 
 @dataclass
 class ClassData:
@@ -119,6 +119,7 @@ class CodeGenVisitor(BaseVisitor):
 
   def visitClassDecl(self, ast: ClassDecl, c):
     self.className = ast.classname.name
+    self.currentClass = self.lookup(ast.classname.name, self.env, lambda x: x.name)
     parentName = ast.parentname.name if ast.parentname is not None else "java.lang.Object"
     self.emit = Emitter(self.path+"/" + self.className + ".j")
     self.emit.printout(self.emit.emitPROLOG(self.className, parentName))
@@ -155,11 +156,16 @@ class CodeGenVisitor(BaseVisitor):
     nlenv = reduce(lambda env, ele: SubBody(frame, [self.visit(ele, env)]+env.sym), body.decl, SubBody(frame, []))
     glenv = nlenv.sym + glenv
     self.emit.printout(self.emit.emitLABEL(frame.getStartLabel(), frame))
-
     # Generate code for statements
     if isInit:
+      # TODO: init field for instance
       self.emit.printout(self.emit.emitREADVAR("this", ClassType(Id(self.className)), 0, frame))
       self.emit.printout(self.emit.emitINVOKESPECIAL(frame))
+    # Load init value for vardecl
+    for x in body.decl:
+      if type(x) is VarDecl:
+        if x.varInit is not None:
+          self.visit(Assign(x.variable, x.varInit), SubBody(frame, glenv))
     list(map(lambda x: self.visit(x, SubBody(frame, glenv)), body.stmt))
 
     self.emit.printout(self.emit.emitLABEL(frame.getEndLabel(), frame))
@@ -179,13 +185,13 @@ class CodeGenVisitor(BaseVisitor):
     self.emit.printout(self.emit.emitVAR(0, ast.constant.name,\
       ast.constType, ctx.frame.getStartLabel(), ctx.frame.getEndLabel(),\
       ctx.frame))
-    ctx.sym.append(Symbol(ast.constant.name, ast.constType, Const(ast.value)))
+    return Symbol(ast.constant.name, ast.constType, Const(ast.value))
   def visitVarDecl(self, ast: VarDecl, ctx: SubBody):
     idx = ctx.frame.getNewIndex()
-    self.emit.printout(self.emit.emitVAR(0, ast.variable.name,\
+    self.emit.printout(self.emit.emitVAR(idx, ast.variable.name,\
       ast.varType, ctx.frame.getStartLabel(), ctx.frame.getEndLabel(),\
       ctx.frame))
-    ctx.sym.append(Symbol(ast.variable.name, ast.varType, Index(idx)))
+    return Symbol(ast.variable.name, ast.varType, Index(idx))
   def visitBlock(self, ast: Block, ctx: SubBody):
     ctx.frame.enterScope(False)
     nenv = reduce(lambda env, ele: SubBody(ctx.frame, [self.visit(ele, env)]+env.sym), ast.decl, SubBody(ctx.frame, []))
@@ -194,14 +200,16 @@ class CodeGenVisitor(BaseVisitor):
     self.emit.printout(self.emit.emitLABEL(ctx.frame.getEndLabel(), ctx.frame))
     ctx.frame.exitScope()
   def visitAssign(self, ast: Assign, ctx: SubBody):
-    #TODO: update visit left first for field access and array
+    elc1, elt1 = self.visit(ast.lhs, Access(ctx.frame, ctx.sym, True, True))
     erc, ert = self.visit(ast.exp, Access(ctx.frame, ctx.sym, False, True))
-    elc, elt = self.visit(ast.lhs, Access(ctx.frame, ctx.sym, True, True))
+    elc2, elt2 = self.visit(ast.lhs, Access(ctx.frame, ctx.sym, True, False))
+    if elc1 is not None:
+      # gen address for field access vs array access
+      self.emit.printout(elc1)
     self.emit.printout(erc)
-    if isinstance(ert, IntType) and isinstance(elt, FloatType):
+    if isinstance(ert, IntType) and isinstance(elt2, FloatType):
       self.emit.printout(self.emit.emitI2F(ctx.frame))
-    self.emit.printout(elc)
-
+    self.emit.printout(elc2)
   def visitIf(self, ast: If, ctx: SubBody):
     self.emit.printout(self.visit(ast.expr, Access(ctx.frame, ctx.sym, False, True))[0])
     lb1 = ctx.frame.getNewLabel()
@@ -222,24 +230,47 @@ class CodeGenVisitor(BaseVisitor):
   def visitReturn(self, ast: Return, ctx):
     pass
   def visitId(self, ast: Id, ctx: Access):
+    # id found in ctx.sym (it is an instance or a variable)
     sym = self.lookup(ast.name, ctx.sym, lambda x: x.name)
-    if sym is not None:
-      # handle if id is found in ctx.sym (it is an instance)
-      pass
-    sym = self.lookup(ast.name, self.env, lambda x: x.name)
-    return ast.name, ClassType(Id(ast.name))
+    if sym is None:
+      # attribute of current class
+      parentclass = self.lookup(self.currentClass.parentname, self.env, lambda x: x.name)
+      sym = self.lookup(ast.name, self.currentClass.members, lambda x: x.name)
+      while sym is None and parentclass is not None:
+        sym = self.lookup(ast.name, parentclass.members, lambda x: x.name)
+        parentclass = self.lookup(parentclass.parentname, self.env, lambda x: x.name)
+    if sym is None:
+      # return class
+      sym = self.lookup(ast.name, self.env, lambda x: x.name)
+      return ast.name, ClassType(Id(ast.name))
+
+    if ctx.isLeft:
+      if ctx.isFirst:
+        return None, None # TODO: update load for field access and array address
+      else:
+        return self.emit.emitWRITEVAR(ast.name, sym.mtype, sym.value.value, ctx.frame), sym.mtype
+    else:
+      # visit rhs (dont care about isFirst or not)
+      if type(sym.value) is Index:
+        return self.emit.emitREADVAR(ast.name, sym.mtype, sym.value.value, ctx.frame), sym.mtype
+      elif type(sym.value) is Const:
+        return self.emit.emitREADCONST(sym.value.value, sym.mtype, ctx.frame), sym.mtype
+      else:
+        # TODO: read field in current class
+        pass
+ 
   def visitArrayCell(self, ast: ArrayCell, ctx):
     pass
   def visitFieldAccess(self, ast: FieldAccess, ctx: Access):
-    ec, et = self.visit(ast.fieldname, Access(ctx.frame, ctx.sym, True, False))
-    classname = type(et).__name__
-    fields = None
-    for key, value in self.genv.items():
-      if key == classname:
-        fields = value["members"]
+    eo, to = self.visit(ast.obj, Access(ctx.frame, ctx.sym, False, True))
+    fields = self.lookup(classname, self.env, lambda x: x.name)
+    fields = fields.members
     field = self.lookup(ast.fieldname.name, fields, lambda x: x.name)
     if ctx.isLeft == True:
-      return self.emit.emitPUTSTATIC(classname+"."+field.name, field.mtype, ctx.frame), field.mtype
+      if ctx.isFirst:
+        return eo, to
+      else:
+        return self.emit.emitPUTSTATIC(classname+"."+field.name, field.mtype, ctx.frame), field.mtype
     if field.value is not None:
       return self.emit.emitPUSHCONST(self.emit.emitEXPR(field.value.value, field.mtype), StringType(), ctx.frame), field.mtype
     return self.emit.emitGETSTATIC(classname+"."+field.name,field.mtype,ctx.frame),field.mtype
@@ -253,53 +284,75 @@ class CodeGenVisitor(BaseVisitor):
     if ast.op == "!":
       return c + self.emit.emitNOT(t, ctx.frame), t
   def visitCallExpr(self, ast: CallExpr, ctx: Access):
-    # TODO: update to call from parent class
     # string, typ: ClassType of instance or class
     value, typ = self.visit(ast.obj, Access(ctx.frame, ctx.sym, False, True))
-    in_ = ("", list())
+    in_ = ("", [])
     # Get return type of the method
-    sym = self.lookup(typ.classname.name, self.env, lambda x: x.name)
-    sym = sym.members
-    sym = self.lookup(ast.method.name, sym, lambda x: x.name)
+    isCallSpecial = False
+    classdata = self.lookup(typ.classname.name, self.env, lambda x: x.name)
+    parentclass = self.lookup(classdata.parentname, self.env, lambda x: x.name)
+    sym = self.lookup(ast.method.name, classdata.members, lambda x: x.name)
+    while sym is None and parentclass is not None:
+      isCallSpecial = True
+      classdata = parentclass
+      sym = self.lookup(ast.method.name, classdata.members, lambda x: x.name)
+      parentclass = self.lookup(classdata.parentname, self.env, lambda x: x.name)
     returnType = sym.mtype.rettype
     kind = sym.kind
     # Gen code for param
     for x in ast.param:
       str1, typ1 = self.visit(x, Access(ctx.frame, ctx.sym, False, True))
       in_ = (in_[0] + str1, in_[1].append(typ1))
-    self.emit.printout(in_[0])
     mtype = MType(in_[1], returnType)
     # handle static class methods
-    if type(kind) is Static():
+    if type(kind) is Static:
       return in_[0] + self.emit.emitINVOKESTATIC(value + "/" + ast.method.name, mtype, ctx.frame), mtype.rettype
+    elif isCallSpecial:
+      return in_[0] + self.emit.emitINVOKESPECIAL(ctx.frame, value+"/"+ast.method.name, mtype), mtype.rettype
     else:
       # handle instance method value is Index
       return in_[0] + self.emit.emitINVOKEVIRTUAL(value + "/" + ast.method.name, mtype, ctx.frame), mtype.rettype
   def visitNewExpr(self, ast: NewExpr, ctx: Access):
-    pass
+    emit = ""
+    emit += self.emit.emitNEW(ast.classname.name)
+    emit += self.emit.emitDUP()
+    in_ = ("", [])
+    for x in ast.param:
+      str1, typ1 = self.visit(x, Access(ctx.frame, ctx.sym, False, True))
+      in_ = (in_[0] + str1, in_[1].append(typ1))
+    emit += in_[0]
+    emit += self.emit.emitINVOKESPECIAL(ctx.frame, ast.classname.name+"/<init>", MType(in_[1], VoidType()))
+    return emit, ClassType(Id(ast.classname.name))
 
   def visitCallStmt(self, ast: CallStmt, ctx: SubBody):
-    # TODO: update to call from parent class
     # string, typ: ClassType of instance or class
     value, typ = self.visit(ast.obj, Access(ctx.frame, ctx.sym, False, True))
-    in_ = ("", list())
+    in_ = ("", [])
     # Get return type of the method
-    sym = self.lookup(typ.classname.name, self.env, lambda x: x.name)
-    sym = sym.members
-    sym = self.lookup(ast.method.name, sym, lambda x: x.name)
-    mtype = sym.mtype
+    isCallSpecial = False
+    classdata = self.lookup(typ.classname.name, self.env, lambda x: x.name)
+    parentclass = self.lookup(classdata.parentname, self.env, lambda x: x.name)
+    sym = self.lookup(ast.method.name, classdata.members, lambda x: x.name)
+    while sym is None and parentclass is not None:
+      isCallSpecial = True
+      classdata = parentclass
+      sym = self.lookup(ast.method.name, classdata.members, lambda x: x.name)
+      parentclass = self.lookup(classdata.parentname, self.env, lambda x: x.name)
+    returnType = sym.mtype.rettype
     kind = sym.kind
     # Gen code for param
     for x in ast.param:
       str1, typ1 = self.visit(x, Access(ctx.frame, ctx.sym, False, True))
-      in_ = (in_[0] + str1, in_[1].append(typ1))
-    self.emit.printout(in_[0])
+      in_ = (in_[0] + str1, in_[1] + [typ1])
+    mtype = MType(in_[1], returnType)
     # handle static class methods
     if type(kind) is Static:
-      self.emit.printout(self.emit.emitINVOKESTATIC(value + "/" + ast.method.name, mtype, ctx.frame))
+      self.emit.printout(in_[0] + self.emit.emitINVOKESTATIC(value + "/" + ast.method.name, mtype, ctx.frame))
+    elif isCallSpecial:
+      self.emit.printout(in_[0] + self.emit.emitINVOKESPECIAL(ctx.frame, value+"/"+ast.method.name, mtype))
     else:
       # handle instance method value is Index
-      self.emit.printout(self.emit.emitINVOKEVIRTUAL(value + "/" + ast.method.name, mtype, ctx.frame))
+      self.emit.printout(in_[0] + self.emit.emitINVOKEVIRTUAL(value + "/" + ast.method.name, mtype, ctx.frame))
 
   def visitBinaryOp(self, ast: BinaryOp, ctx: Access):
     op = ast.op
@@ -332,13 +385,13 @@ class CodeGenVisitor(BaseVisitor):
       raise "TODO update concat string" 
 
   def visitIntLiteral(self, ast, o):
-    return self.emit.emitPUSHICONST(ast.value, o.frame), IntType()
+    return self.emit.emitPUSHCONST(ast.value, IntType(), o.frame), IntType()
   def visitFloatLiteral(self, ast: FloatLiteral, o):
-    return self.emit.emitPUSHFCONST(str(ast.value), o.frame), FloatType()
+    return self.emit.emitPUSHCONST(str(ast.value), FloatType(), o.frame), FloatType()
   def visitStringLiteral(self, ast: StringLiteral, o):
-    return self.emit.emitPUSHCONST(str(ast.value), StringType(), o.frame), StringType()
+    return self.emit.emitPUSHCONST(ast.value, StringType(), o.frame), StringType()
   def visitBooleanLiteral(self, ast: BooleanLiteral, o):
-    return self.emit.emitPUSHICONST(str(ast.value), o.frame), BoolType()
+    return self.emit.emitPUSHCONST(ast.value, BoolType(), o.frame), BoolType()
   def visitNullLiteral(self, ast: NullLiteral, o):
     pass
   def visitSelfLiteral(self, ast: SelfLiteral, o):

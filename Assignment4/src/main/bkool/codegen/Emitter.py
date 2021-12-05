@@ -51,7 +51,7 @@ class Emitter():
         #in: Int or Sring
         #frame: Frame
         
-        frame.push();
+        frame.push()
         if type(in_) is int:
             i = in_
             if i >= -1 and i <=5:
@@ -92,6 +92,10 @@ class Emitter():
         
         if type(typ) is IntType:
             return self.emitPUSHICONST(in_, frame)
+        elif type(typ) is FloatType:
+            return self.emitPUSHFCONST(in_, frame)
+        elif type(typ) is BoolType:
+            return self.emitPUSHICONST("true" if in_ else "false", frame)
         elif type(typ) is StringType:
             frame.push()
             return self.jvm.emitLDC(in_)
@@ -598,6 +602,9 @@ class Emitter():
         frame.push()
         return self.jvm.emitDUP()
 
+    def emitNEW(self, frame, lexeme):
+        return self.jvm.emitNEW(lexeme)
+
     def emitPOP(self, frame):
         #frame: Frame
 
@@ -624,11 +631,15 @@ class Emitter():
         #in_: Type
         #frame: Frame
 
-        if type(in_) is IntType:
-            frame.pop()
-            return self.jvm.emitIRETURN()
-        elif type(in_) is VoidType:
+        if type(in_) is VoidType:
             return self.jvm.emitRETURN()
+        frame.pop()
+        if type(in_) is IntType:
+            return self.jvm.emitIRETURN()
+        elif type(in_) is FloatType:
+            return self.jvm.emitFRETURN()
+        else:
+            return self.jvm.emitARETURN()
 
     ''' generate code that represents a label	
     *   @param label the label
@@ -691,6 +702,16 @@ class Emitter():
     def clearBuff(self):
         self.buff.clear()
 
+    def emitREADCONST(self, val, in_, frame):
+        frame.push()
+        if type(in_) is IntType:
+            return self.emitPUSHICONST(val.value, frame)
+        elif type(in_) is BoolType:
+            return self.emitPUSHICONST("true" if val.value else "false", frame)
+        elif type(in_) is FloatType:
+            return self.emitPUSHFCONST(str(val.value), frame)
+        elif type(in_) is ClassType or type(in_) is StringType:
+            return self.jvm.emitLDC(val.value)
 
 
 
