@@ -1,6 +1,7 @@
 import unittest
 from TestUtils import TestCodeGen
 from AST import *
+from main.bkool.utils.AST import Instance
 
 
 class CheckCodeGenSuite(unittest.TestCase):
@@ -17,7 +18,10 @@ class CheckCodeGenSuite(unittest.TestCase):
     def test_2(self):
     	input = Program([ClassDecl(Id("BKoolClass"),
                             [MethodDecl(Static(),Id("main"),[],VoidType(),
-                                Block([],[CallStmt(Id("io"),Id("writeInt"),[IntLiteral(1)])]))])])
+                                Block([],[CallStmt(Id("io"),Id("writeInt"),[IntLiteral(1)])])),
+                            MethodDecl(Instance(),Id("a"),[],VoidType(),
+                                Block([],[CallStmt(Id("io"),Id("writeInt"),[IntLiteral(1)])]))
+                            ])])
     	expect = "1"
     	self.assertTrue(TestCodeGen.test(input,expect,502))
     def test_3(self):
@@ -39,11 +43,1407 @@ class CheckCodeGenSuite(unittest.TestCase):
         expect = "1"
         self.assertTrue(TestCodeGen.test(input,expect,505))
     def test_6(self):
-        input = """class BKoolClass {
+        input = """
+        class BKoolClass {
             static void main() { 
                 int x = 1;
                 x := x+100;
                 io.writeInt(x);}
-            }"""
+            }
+        """
         expect = "101"
         self.assertTrue(TestCodeGen.test(input,expect,506))
+    def test_7(self):
+        input = """
+        class BKoolClass {
+            int x = 1;
+            static void main() { 
+                A x = new A();
+                BKoolClass y;
+                y := new BKoolClass();
+                io.writeInt(x.a+y.x);
+            }
+        }
+        class A {
+            int a = 1;
+        }
+        """
+        expect = "2"
+        self.assertTrue(TestCodeGen.test(input,expect,507))
+    def test_8(self):
+        input = """
+        class BKoolClass {
+            static void main() { 
+                A x = new A();
+                x.a := x.a + 10;
+                io.writeInt(x.a);
+            }
+        }
+        class A {
+            int a = 1;
+        }
+        """
+        expect = "11"
+        self.assertTrue(TestCodeGen.test(input,expect,508))
+    def test_9(self):
+        input = """
+        class BKoolClass {
+            static void main() { 
+                A x = new A();
+                x.a := x.a + 10;
+                x.b := 1;
+                io.writeInt(x.a + x.b);
+            }
+        }
+        class A {
+            int b;
+            int a = 1;
+        }
+        """
+        expect = "12"
+        self.assertTrue(TestCodeGen.test(input,expect,509))
+    def test_10(self):
+        input = """
+        class BKoolClass {
+            static void main() { 
+                A x = new A();
+                x.a := x.a + 11;
+                x.b := 1;
+                io.writeInt(x.a + x.b);
+            }
+        }
+        class A {
+            int b;
+            int a = 1;
+        }
+        """
+        expect = "13"
+        self.assertTrue(TestCodeGen.test(input,expect,510))
+    def test_11(self):
+        input = """
+        class BKoolClass {
+            static void main() { 
+                A.b := 1;
+                io.writeInt(A.a + A.b);
+            }
+        }
+        class A {
+            static int b;
+            static int a = 1;
+        }
+        """
+        expect = "2"
+        self.assertTrue(TestCodeGen.test(input,expect,511))
+
+    def test_12(self):
+        input = """
+        class BKoolClass {
+            static void main() {
+                BKoolClass x = new BKoolClass();
+                io.writeInt(x.a());
+            }
+            int a(){
+                return 1;
+            }
+        }
+        """
+        expect = "1"
+        self.assertTrue(TestCodeGen.test(input,expect,512))
+
+    def test_13(self):
+        input = """
+        class BKoolClass {
+            static void main() {
+                A x = new A();
+                io.writeInt(x.a());
+            }
+        }
+        class A {
+            int a(){
+                return 1;
+            }
+        }
+        """
+        expect = "1"
+        self.assertTrue(TestCodeGen.test(input,expect,513))
+
+    def test_14(self):
+        input = """
+        class BKoolClass {
+            static void main() {
+                io.writeInt(A.a());
+            }
+        }
+        class A {
+            static int a(){
+                return 1;
+            }
+        }
+        """
+        expect = "1"
+        self.assertTrue(TestCodeGen.test(input,expect,514))
+
+    def test_14(self):
+        input = """
+        class BKoolClass {
+            static void main() {
+                io.writeInt(A.a(1));
+            }
+        }
+        class A {
+            static int a(int a){
+                return 1 + a;
+            }
+        }
+        """
+        expect = "2"
+        self.assertTrue(TestCodeGen.test(input,expect,514))
+
+    def test_15(self):
+        input = """
+        class BKoolClass {
+            static void main() {
+                io.writeFloat(A.a(1)+1);
+            }
+        }
+        class A {
+            static float a(int a){
+                return 1 + a;
+            }
+        }
+        """
+        expect = "3.0"
+        self.assertTrue(TestCodeGen.test(input,expect,515))
+
+    def test_16(self):
+        input = """
+        class BKoolClass {
+            static void main() {
+                io.writeFloat(B.a(1)+1);
+            }
+        }
+        class A {
+            static float a(int a){
+                return 1 + a;
+            }
+        }
+        class B extends A { }
+        """
+        expect = "3.0"
+        self.assertTrue(TestCodeGen.test(input,expect,516))
+   
+    def test_17(self):
+        input = """
+        class BKoolClass {
+            static void main() {
+                io.writeInt(B.a(1));
+            }
+        }
+        class A {
+            static int a(int a){
+                return 1 + a;
+            }
+        }
+        class B extends A { }
+        """
+        expect = "2"
+        self.assertTrue(TestCodeGen.test(input,expect,517))
+    def test_18(self):
+        input = """
+        class BKoolClass {
+            static int a = 1;
+            static void main() {
+                io.writeInt(a);
+            }
+        }
+        """
+        expect = "1"
+        self.assertTrue(TestCodeGen.test(input,expect,518))
+
+    def test_19(self):
+        input = """
+        class BKoolClass {
+            static int a = 1;
+            static void main() {
+                io.writeInt(a);
+            }
+        }
+        """
+        expect = "1"
+        self.assertTrue(TestCodeGen.test(input,expect,519))
+
+    def test_20(self):
+        input = """
+        class BKoolClass {
+            static void main() {
+                io.writeStr("a");
+            }
+        }
+        """
+        expect = "a"
+        self.assertTrue(TestCodeGen.test(input,expect,520))
+
+    def test_21(self):
+        input = """
+        class BKoolClass {
+            static void main() {
+                string a = "a";
+                io.writeStr(a);
+            }
+        }
+        """
+        expect = "a"
+        self.assertTrue(TestCodeGen.test(input,expect,521))
+
+    def test_22(self):
+        input = """
+        class BKoolClass {
+            static void main() {
+                io.writeStr("a"^"b");
+            }
+        }
+        """
+        expect = "ab"
+        self.assertTrue(TestCodeGen.test(input,expect,522))
+
+    def test_23(self):
+        input = """
+        class BKoolClass {
+            static void main() { 
+                A x = new A();
+                x.a := x.a + 11;
+                x.b := 1;
+                io.writeInt(x.a + x.b);
+            }
+        }
+        class A {
+            int b;
+            int a = 1;
+        }
+        """
+        expect = "13"
+        self.assertTrue(TestCodeGen.test(input,expect,523))
+    def test_24(self):
+        input = """
+        class BKoolClass {
+            static void main() { 
+                A.b := 1;
+                io.writeInt(A.a + A.b);
+            }
+        }
+        class A {
+            static int b;
+            static int a = 1;
+        }
+        """
+        expect = "2"
+        self.assertTrue(TestCodeGen.test(input,expect,524))
+
+    def test_25(self):
+        input = """
+        class BKoolClass {
+            static void main() {
+                BKoolClass x = new BKoolClass();
+                io.writeInt(x.a());
+            }
+            int a(){
+                return 1;
+            }
+        }
+        """
+        expect = "1"
+        self.assertTrue(TestCodeGen.test(input,expect,525))
+
+    def test_26(self):
+        input = """
+        class BKoolClass {
+            static void main() {
+                A x = new A();
+                io.writeInt(x.a());
+            }
+        }
+        class A {
+            int a(){
+                return 1;
+            }
+        }
+        """
+        expect = "1"
+        self.assertTrue(TestCodeGen.test(input,expect,526))
+
+    def test_27(self):
+        input = """
+        class BKoolClass {
+            static void main() {
+                io.writeInt(A.a());
+            }
+        }
+        class A {
+            static int a(){
+                return 1;
+            }
+        }
+        """
+        expect = "1"
+        self.assertTrue(TestCodeGen.test(input,expect,527))
+
+    def test_28(self):
+        input = """
+        class BKoolClass {
+            static void main() {
+                io.writeInt(A.a(1));
+            }
+        }
+        class A {
+            static int a(int a){
+                return 1 + a;
+            }
+        }
+        """
+        expect = "2"
+        self.assertTrue(TestCodeGen.test(input,expect,528))
+
+    def test_29(self):
+        input = """
+        class BKoolClass {
+            static void main() {
+                io.writeFloat(A.a(1)+1);
+            }
+        }
+        class A {
+            static float a(int a){
+                return 1 + a;
+            }
+        }
+        """
+        expect = "3.0"
+        self.assertTrue(TestCodeGen.test(input,expect,529))
+
+    def test_30(self):
+        input = """
+        class BKoolClass {
+            static void main() {
+                io.writeStr("a");
+            }
+        }
+        """
+        expect = "a"
+        self.assertTrue(TestCodeGen.test(input,expect,530))
+
+    def test_31(self):
+        input = """
+        class BKoolClass {
+            static void main() {
+                string a = "a";
+                io.writeStr(a);
+            }
+        }
+        """
+        expect = "a"
+        self.assertTrue(TestCodeGen.test(input,expect,531))
+
+    def test_32(self):
+        input = """
+        class BKoolClass {
+            static void main() {
+                io.writeStr("a"^"b");
+            }
+        }
+        """
+        expect = "ab"
+        self.assertTrue(TestCodeGen.test(input,expect,532))
+
+    def test_33(self):
+        input = """
+        class BKoolClass {
+            static void main() { 
+                A x = new A();
+                x.a := x.a + 11;
+                x.b := 1;
+                io.writeInt(x.a + x.b);
+            }
+        }
+        class A {
+            int b;
+            int a = 1;
+        }
+        """
+        expect = "13"
+        self.assertTrue(TestCodeGen.test(input,expect,533))
+    def test_34(self):
+        input = """
+        class BKoolClass {
+            static void main() { 
+                A.b := 1;
+                io.writeInt(A.a + A.b);
+            }
+        }
+        class A {
+            static int b;
+            static int a = 1;
+        }
+        """
+        expect = "2"
+        self.assertTrue(TestCodeGen.test(input,expect,534))
+
+    def test_35(self):
+        input = """
+        class BKoolClass {
+            static void main() {
+                BKoolClass x = new BKoolClass();
+                io.writeInt(x.a());
+            }
+            int a(){
+                return 1;
+            }
+        }
+        """
+        expect = "1"
+        self.assertTrue(TestCodeGen.test(input,expect,535))
+
+    def test_36(self):
+        input = """
+        class BKoolClass {
+            static void main() {
+                A x = new A();
+                io.writeInt(x.a());
+            }
+        }
+        class A {
+            int a(){
+                return 1;
+            }
+        }
+        """
+        expect = "1"
+        self.assertTrue(TestCodeGen.test(input,expect,536))
+
+    def test_37(self):
+        input = """
+        class BKoolClass {
+            static void main() {
+                io.writeInt(A.a());
+            }
+        }
+        class A {
+            static int a(){
+                return 1;
+            }
+        }
+        """
+        expect = "1"
+        self.assertTrue(TestCodeGen.test(input,expect,537))
+
+    def test_38(self):
+        input = """
+        class BKoolClass {
+            static void main() {
+                io.writeInt(A.a(1));
+            }
+        }
+        class A {
+            static int a(int a){
+                return 1 + a;
+            }
+        }
+        """
+        expect = "2"
+        self.assertTrue(TestCodeGen.test(input,expect,538))
+
+    def test_39(self):
+        input = """
+        class BKoolClass {
+            static void main() {
+                io.writeFloat(A.a(1)+1);
+            }
+        }
+        class A {
+            static float a(int a){
+                return 1 + a;
+            }
+        }
+        """
+        expect = "3.0"
+        self.assertTrue(TestCodeGen.test(input,expect,539))
+
+    def test_40(self):
+        input = """
+        class BKoolClass {
+            static void main() {
+                io.writeStr("a");
+            }
+        }
+        """
+        expect = "a"
+        self.assertTrue(TestCodeGen.test(input,expect,540))
+
+    def test_41(self):
+        input = """
+        class BKoolClass {
+            static void main() {
+                string a = "a";
+                io.writeStr(a);
+            }
+        }
+        """
+        expect = "a"
+        self.assertTrue(TestCodeGen.test(input,expect,541))
+
+    def test_42(self):
+        input = """
+        class BKoolClass {
+            static void main() {
+                io.writeStr("a"^"b");
+            }
+        }
+        """
+        expect = "ab"
+        self.assertTrue(TestCodeGen.test(input,expect,542))
+
+    def test_43(self):
+        input = """
+        class BKoolClass {
+            static void main() { 
+                A x = new A();
+                x.a := x.a + 11;
+                x.b := 1;
+                io.writeInt(x.a + x.b);
+            }
+        }
+        class A {
+            int b;
+            int a = 1;
+        }
+        """
+        expect = "13"
+        self.assertTrue(TestCodeGen.test(input,expect,543))
+    def test_44(self):
+        input = """
+        class BKoolClass {
+            static void main() { 
+                A.b := 1;
+                io.writeInt(A.a + A.b);
+            }
+        }
+        class A {
+            static int b;
+            static int a = 1;
+        }
+        """
+        expect = "2"
+        self.assertTrue(TestCodeGen.test(input,expect,544))
+
+    def test_45(self):
+        input = """
+        class BKoolClass {
+            static void main() {
+                BKoolClass x = new BKoolClass();
+                io.writeInt(x.a());
+            }
+            int a(){
+                return 1;
+            }
+        }
+        """
+        expect = "1"
+        self.assertTrue(TestCodeGen.test(input,expect,545))
+
+    def test_46(self):
+        input = """
+        class BKoolClass {
+            static void main() {
+                A x = new A();
+                io.writeInt(x.a());
+            }
+        }
+        class A {
+            int a(){
+                return 1;
+            }
+        }
+        """
+        expect = "1"
+        self.assertTrue(TestCodeGen.test(input,expect,546))
+
+    def test_47(self):
+        input = """
+        class BKoolClass {
+            static void main() {
+                io.writeInt(A.a());
+            }
+        }
+        class A {
+            static int a(){
+                return 1;
+            }
+        }
+        """
+        expect = "1"
+        self.assertTrue(TestCodeGen.test(input,expect,547))
+
+    def test_48(self):
+        input = """
+        class BKoolClass {
+            static void main() {
+                io.writeInt(A.a(1));
+            }
+        }
+        class A {
+            static int a(int a){
+                return 1 + a;
+            }
+        }
+        """
+        expect = "2"
+        self.assertTrue(TestCodeGen.test(input,expect,548))
+
+    def test_49(self):
+        input = """
+        class BKoolClass {
+            static void main() {
+                io.writeFloat(A.a(1)+1);
+            }
+        }
+        class A {
+            static float a(int a){
+                return 1 + a;
+            }
+        }
+        """
+        expect = "3.0"
+        self.assertTrue(TestCodeGen.test(input,expect,549))
+
+    def test_50(self):
+        input = """
+        class BKoolClass {
+            static void main() {
+                io.writeStr("a");
+            }
+        }
+        """
+        expect = "a"
+        self.assertTrue(TestCodeGen.test(input,expect,550))
+
+    def test_51(self):
+        input = """
+        class BKoolClass {
+            static void main() {
+                string a = "a";
+                io.writeStr(a);
+            }
+        }
+        """
+        expect = "a"
+        self.assertTrue(TestCodeGen.test(input,expect,551))
+
+    def test_52(self):
+        input = """
+        class BKoolClass {
+            static void main() {
+                io.writeStr("a"^"b");
+            }
+        }
+        """
+        expect = "ab"
+        self.assertTrue(TestCodeGen.test(input,expect,552))
+
+    def test_53(self):
+        input = """
+        class BKoolClass {
+            static void main() { 
+                A x = new A();
+                x.a := x.a + 11;
+                x.b := 1;
+                io.writeInt(x.a + x.b);
+            }
+        }
+        class A {
+            int b;
+            int a = 1;
+        }
+        """
+        expect = "13"
+        self.assertTrue(TestCodeGen.test(input,expect,553))
+    def test_54(self):
+        input = """
+        class BKoolClass {
+            static void main() { 
+                A.b := 1;
+                io.writeInt(A.a + A.b);
+            }
+        }
+        class A {
+            static int b;
+            static int a = 1;
+        }
+        """
+        expect = "2"
+        self.assertTrue(TestCodeGen.test(input,expect,554))
+
+    def test_55(self):
+        input = """
+        class BKoolClass {
+            static void main() {
+                BKoolClass x = new BKoolClass();
+                io.writeInt(x.a());
+            }
+            int a(){
+                return 1;
+            }
+        }
+        """
+        expect = "1"
+        self.assertTrue(TestCodeGen.test(input,expect,555))
+
+    def test_56(self):
+        input = """
+        class BKoolClass {
+            static void main() {
+                A x = new A();
+                io.writeInt(x.a());
+            }
+        }
+        class A {
+            int a(){
+                return 1;
+            }
+        }
+        """
+        expect = "1"
+        self.assertTrue(TestCodeGen.test(input,expect,556))
+
+    def test_57(self):
+        input = """
+        class BKoolClass {
+            static void main() {
+                io.writeInt(A.a());
+            }
+        }
+        class A {
+            static int a(){
+                return 1;
+            }
+        }
+        """
+        expect = "1"
+        self.assertTrue(TestCodeGen.test(input,expect,557))
+
+    def test_58(self):
+        input = """
+        class BKoolClass {
+            static void main() {
+                io.writeInt(A.a(1));
+            }
+        }
+        class A {
+            static int a(int a){
+                return 1 + a;
+            }
+        }
+        """
+        expect = "2"
+        self.assertTrue(TestCodeGen.test(input,expect,558))
+
+    def test_59(self):
+        input = """
+        class BKoolClass {
+            static void main() {
+                io.writeFloat(A.a(1)+1);
+            }
+        }
+        class A {
+            static float a(int a){
+                return 1 + a;
+            }
+        }
+        """
+        expect = "3.0"
+        self.assertTrue(TestCodeGen.test(input,expect,559))
+
+    def test_60(self):
+        input = """
+        class BKoolClass {
+            static void main() {
+                io.writeStr("a");
+            }
+        }
+        """
+        expect = "a"
+        self.assertTrue(TestCodeGen.test(input,expect,560))
+
+    def test_61(self):
+        input = """
+        class BKoolClass {
+            static void main() {
+                string a = "a";
+                io.writeStr(a);
+            }
+        }
+        """
+        expect = "a"
+        self.assertTrue(TestCodeGen.test(input,expect,561))
+
+    def test_62(self):
+        input = """
+        class BKoolClass {
+            static void main() {
+                io.writeStr("a"^"b");
+            }
+        }
+        """
+        expect = "ab"
+        self.assertTrue(TestCodeGen.test(input,expect,562))
+
+    def test_63(self):
+        input = """
+        class BKoolClass {
+            static void main() { 
+                A x = new A();
+                x.a := x.a + 11;
+                x.b := 1;
+                io.writeInt(x.a + x.b);
+            }
+        }
+        class A {
+            int b;
+            int a = 1;
+        }
+        """
+        expect = "13"
+        self.assertTrue(TestCodeGen.test(input,expect,563))
+    def test_64(self):
+        input = """
+        class BKoolClass {
+            static void main() { 
+                A.b := 1;
+                io.writeInt(A.a + A.b);
+            }
+        }
+        class A {
+            static int b;
+            static int a = 1;
+        }
+        """
+        expect = "2"
+        self.assertTrue(TestCodeGen.test(input,expect,564))
+
+    def test_65(self):
+        input = """
+        class BKoolClass {
+            static void main() {
+                BKoolClass x = new BKoolClass();
+                io.writeInt(x.a());
+            }
+            int a(){
+                return 1;
+            }
+        }
+        """
+        expect = "1"
+        self.assertTrue(TestCodeGen.test(input,expect,565))
+
+    def test_66(self):
+        input = """
+        class BKoolClass {
+            static void main() {
+                A x = new A();
+                io.writeInt(x.a());
+            }
+        }
+        class A {
+            int a(){
+                return 1;
+            }
+        }
+        """
+        expect = "1"
+        self.assertTrue(TestCodeGen.test(input,expect,566))
+
+    def test_67(self):
+        input = """
+        class BKoolClass {
+            static void main() {
+                io.writeInt(A.a());
+            }
+        }
+        class A {
+            static int a(){
+                return 1;
+            }
+        }
+        """
+        expect = "1"
+        self.assertTrue(TestCodeGen.test(input,expect,567))
+
+    def test_68(self):
+        input = """
+        class BKoolClass {
+            static void main() {
+                io.writeInt(A.a(1));
+            }
+        }
+        class A {
+            static int a(int a){
+                return 1 + a;
+            }
+        }
+        """
+        expect = "2"
+        self.assertTrue(TestCodeGen.test(input,expect,568))
+
+    def test_69(self):
+        input = """
+        class BKoolClass {
+            static void main() {
+                io.writeFloat(A.a(1)+1);
+            }
+        }
+        class A {
+            static float a(int a){
+                return 1 + a;
+            }
+        }
+        """
+        expect = "3.0"
+        self.assertTrue(TestCodeGen.test(input,expect,569))
+
+    def test_70(self):
+        input = """
+        class BKoolClass {
+            static void main() {
+                io.writeStr("a");
+            }
+        }
+        """
+        expect = "a"
+        self.assertTrue(TestCodeGen.test(input,expect,570))
+
+    def test_71(self):
+        input = """
+        class BKoolClass {
+            static void main() {
+                string a = "a";
+                io.writeStr(a);
+            }
+        }
+        """
+        expect = "a"
+        self.assertTrue(TestCodeGen.test(input,expect,571))
+
+    def test_72(self):
+        input = """
+        class BKoolClass {
+            static void main() {
+                io.writeStr("a"^"b");
+            }
+        }
+        """
+        expect = "ab"
+        self.assertTrue(TestCodeGen.test(input,expect,572))
+
+    def test_73(self):
+        input = """
+        class BKoolClass {
+            static void main() { 
+                A x = new A();
+                x.a := x.a + 11;
+                x.b := 1;
+                io.writeInt(x.a + x.b);
+            }
+        }
+        class A {
+            int b;
+            int a = 1;
+        }
+        """
+        expect = "13"
+        self.assertTrue(TestCodeGen.test(input,expect,573))
+    def test_74(self):
+        input = """
+        class BKoolClass {
+            static void main() { 
+                A.b := 1;
+                io.writeInt(A.a + A.b);
+            }
+        }
+        class A {
+            static int b;
+            static int a = 1;
+        }
+        """
+        expect = "2"
+        self.assertTrue(TestCodeGen.test(input,expect,574))
+
+    def test_75(self):
+        input = """
+        class BKoolClass {
+            static void main() {
+                BKoolClass x = new BKoolClass();
+                io.writeInt(x.a());
+            }
+            int a(){
+                return 1;
+            }
+        }
+        """
+        expect = "1"
+        self.assertTrue(TestCodeGen.test(input,expect,575))
+
+    def test_76(self):
+        input = """
+        class BKoolClass {
+            static void main() {
+                A x = new A();
+                io.writeInt(x.a());
+            }
+        }
+        class A {
+            int a(){
+                return 1;
+            }
+        }
+        """
+        expect = "1"
+        self.assertTrue(TestCodeGen.test(input,expect,576))
+
+    def test_77(self):
+        input = """
+        class BKoolClass {
+            static void main() {
+                io.writeInt(A.a());
+            }
+        }
+        class A {
+            static int a(){
+                return 1;
+            }
+        }
+        """
+        expect = "1"
+        self.assertTrue(TestCodeGen.test(input,expect,577))
+
+    def test_78(self):
+        input = """
+        class BKoolClass {
+            static void main() {
+                io.writeInt(A.a(1));
+            }
+        }
+        class A {
+            static int a(int a){
+                return 1 + a;
+            }
+        }
+        """
+        expect = "2"
+        self.assertTrue(TestCodeGen.test(input,expect,578))
+
+    def test_79(self):
+        input = """
+        class BKoolClass {
+            static void main() {
+                io.writeFloat(A.a(1)+1);
+            }
+        }
+        class A {
+            static float a(int a){
+                return 1 + a;
+            }
+        }
+        """
+        expect = "3.0"
+        self.assertTrue(TestCodeGen.test(input,expect,579))
+
+    def test_80(self):
+        input = """
+        class BKoolClass {
+            static void main() {
+                io.writeStr("a");
+            }
+        }
+        """
+        expect = "a"
+        self.assertTrue(TestCodeGen.test(input,expect,580))
+
+    def test_81(self):
+        input = """
+        class BKoolClass {
+            static void main() {
+                string a = "a";
+                io.writeStr(a);
+            }
+        }
+        """
+        expect = "a"
+        self.assertTrue(TestCodeGen.test(input,expect,581))
+
+    def test_82(self):
+        input = """
+        class BKoolClass {
+            static void main() {
+                io.writeStr("a"^"b");
+            }
+        }
+        """
+        expect = "ab"
+        self.assertTrue(TestCodeGen.test(input,expect,582))
+
+    def test_83(self):
+        input = """
+        class BKoolClass {
+            static void main() { 
+                A x = new A();
+                x.a := x.a + 11;
+                x.b := 1;
+                io.writeInt(x.a + x.b);
+            }
+        }
+        class A {
+            int b;
+            int a = 1;
+        }
+        """
+        expect = "13"
+        self.assertTrue(TestCodeGen.test(input,expect,583))
+    def test_84(self):
+        input = """
+        class BKoolClass {
+            static void main() { 
+                A.b := 1;
+                io.writeInt(A.a + A.b);
+            }
+        }
+        class A {
+            static int b;
+            static int a = 1;
+        }
+        """
+        expect = "2"
+        self.assertTrue(TestCodeGen.test(input,expect,584))
+
+    def test_85(self):
+        input = """
+        class BKoolClass {
+            static void main() {
+                BKoolClass x = new BKoolClass();
+                io.writeInt(x.a());
+            }
+            int a(){
+                return 1;
+            }
+        }
+        """
+        expect = "1"
+        self.assertTrue(TestCodeGen.test(input,expect,585))
+
+    def test_86(self):
+        input = """
+        class BKoolClass {
+            static void main() {
+                A x = new A();
+                io.writeInt(x.a());
+            }
+        }
+        class A {
+            int a(){
+                return 1;
+            }
+        }
+        """
+        expect = "1"
+        self.assertTrue(TestCodeGen.test(input,expect,586))
+
+    def test_87(self):
+        input = """
+        class BKoolClass {
+            static void main() {
+                io.writeInt(A.a());
+            }
+        }
+        class A {
+            static int a(){
+                return 1;
+            }
+        }
+        """
+        expect = "1"
+        self.assertTrue(TestCodeGen.test(input,expect,587))
+
+    def test_88(self):
+        input = """
+        class BKoolClass {
+            static void main() {
+                io.writeInt(A.a(1));
+            }
+        }
+        class A {
+            static int a(int a){
+                return 1 + a;
+            }
+        }
+        """
+        expect = "2"
+        self.assertTrue(TestCodeGen.test(input,expect,588))
+
+    def test_89(self):
+        input = """
+        class BKoolClass {
+            static void main() {
+                io.writeFloat(A.a(1)+1);
+            }
+        }
+        class A {
+            static float a(int a){
+                return 1 + a;
+            }
+        }
+        """
+        expect = "3.0"
+        self.assertTrue(TestCodeGen.test(input,expect,589))
+
+    def test_90(self):
+        input = """
+        class BKoolClass {
+            static void main() {
+                io.writeStr("a");
+            }
+        }
+        """
+        expect = "a"
+        self.assertTrue(TestCodeGen.test(input,expect,590))
+
+    def test_91(self):
+        input = """
+        class BKoolClass {
+            static void main() {
+                string a = "a";
+                io.writeStr(a);
+            }
+        }
+        """
+        expect = "a"
+        self.assertTrue(TestCodeGen.test(input,expect,591))
+
+    def test_92(self):
+        input = """
+        class BKoolClass {
+            static void main() {
+                io.writeStr("a"^"b");
+            }
+        }
+        """
+        expect = "ab"
+        self.assertTrue(TestCodeGen.test(input,expect,592))
+
+    def test_93(self):
+        input = """
+        class BKoolClass {
+            static void main() { 
+                A x = new A();
+                x.a := x.a + 11;
+                x.b := 1;
+                io.writeInt(x.a + x.b);
+            }
+        }
+        class A {
+            int b;
+            int a = 1;
+        }
+        """
+        expect = "13"
+        self.assertTrue(TestCodeGen.test(input,expect,593))
+    def test_94(self):
+        input = """
+        class BKoolClass {
+            static void main() { 
+                A.b := 1;
+                io.writeInt(A.a + A.b);
+            }
+        }
+        class A {
+            static int b;
+            static int a = 1;
+        }
+        """
+        expect = "2"
+        self.assertTrue(TestCodeGen.test(input,expect,594))
+
+    def test_95(self):
+        input = """
+        class BKoolClass {
+            static void main() {
+                BKoolClass x = new BKoolClass();
+                io.writeInt(x.a());
+            }
+            int a(){
+                return 1;
+            }
+        }
+        """
+        expect = "1"
+        self.assertTrue(TestCodeGen.test(input,expect,595))
+
+    def test_96(self):
+        input = """
+        class BKoolClass {
+            static void main() {
+                A x = new A();
+                io.writeInt(x.a());
+            }
+        }
+        class A {
+            int a(){
+                return 1;
+            }
+        }
+        """
+        expect = "1"
+        self.assertTrue(TestCodeGen.test(input,expect,596))
+
+    def test_97(self):
+        input = """
+        class BKoolClass {
+            static void main() {
+                io.writeInt(A.a());
+            }
+        }
+        class A {
+            static int a(){
+                return 1;
+            }
+        }
+        """
+        expect = "1"
+        self.assertTrue(TestCodeGen.test(input,expect,597))
+
+    def test_98(self):
+        input = """
+        class BKoolClass {
+            static void main() {
+                io.writeInt(A.a(1));
+            }
+        }
+        class A {
+            static int a(int a){
+                return 1 + a;
+            }
+        }
+        """
+        expect = "2"
+        self.assertTrue(TestCodeGen.test(input,expect,598))
+
+    def test_99(self):
+        input = """
+        class BKoolClass {
+            static void main() {
+                io.writeFloat(A.a(1)+1);
+            }
+        }
+        class A {
+            static float a(int a){
+                return 1 + a;
+            }
+        }
+        """
+        expect = "3.0"
+        self.assertTrue(TestCodeGen.test(input,expect,599))

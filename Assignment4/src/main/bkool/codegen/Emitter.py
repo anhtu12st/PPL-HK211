@@ -1,18 +1,9 @@
-import sys
 from Utils import *
 #from StaticCheck import *
 #from StaticError import *
 import CodeGenerator as cgen
 from MachineCode import JasminCode
-# from AST import *
-
-if not './main/bkool/utils/' in sys.path:
-  from main.bkool.utils.Visitor import *
-  from main.bkool.utils.AST import *
-else:
-  from Visitor import *
-  from AST import *
-
+from AST import *
 
 
 class Emitter():
@@ -238,13 +229,16 @@ class Emitter():
     *   @param in the type of the attribute.
     *   @param isFinal true in case of constant; false otherwise
     '''
-    def emitATTRIBUTE(self, lexeme, in_, isFinal, value):
+    def emitATTRIBUTE(self, lexeme, in_, isFinal, kind):
         #lexeme: String
         #in_: Type
         #isFinal: Boolean
         #value: String
+        if type(kind) is Static:
+            return self.jvm.emitSTATICFIELD(lexeme, self.getJVMType(in_), isFinal)
+        else:
+            return self.jvm.emitINSTANCEFIELD(lexeme, self.getJVMType(in_))
 
-        return self.jvm.emitSTATICFIELD(lexeme, self.getJVMType(in_), false)
 
     def emitGETSTATIC(self, lexeme, in_, frame):
         #lexeme: String
@@ -266,7 +260,7 @@ class Emitter():
         #lexeme: String
         #in_: Type
         #frame: Frame
-
+        frame.push()
         return self.jvm.emitGETFIELD(lexeme, self.getJVMType(in_))
 
     def emitPUTFIELD(self, lexeme, in_, frame):
@@ -603,6 +597,7 @@ class Emitter():
         return self.jvm.emitDUP()
 
     def emitNEW(self, frame, lexeme):
+        frame.push()
         return self.jvm.emitNEW(lexeme)
 
     def emitPOP(self, frame):
@@ -713,7 +708,9 @@ class Emitter():
         elif type(in_) is ClassType or type(in_) is StringType:
             return self.jvm.emitLDC(val.value)
 
-
+    def emitCONCAT(self, _in, frame):
+        frame.push()
+        return self.jvm.emitLDC(_in)
 
 
         
